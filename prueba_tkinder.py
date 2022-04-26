@@ -1,5 +1,4 @@
 import tkinter
-from turtle import position
 
 ventana = tkinter.Tk()
 ventana.geometry("300x200")
@@ -18,7 +17,6 @@ lbl_contraseña.pack()
 
 txt_contraseña = tkinter.Entry(ventana, justify="center",show="*")
 txt_contraseña.pack()
-
 
 def ingresar():
     usuario = txt_usuario.get()
