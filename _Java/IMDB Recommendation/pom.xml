@@ -20,10 +20,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.8.2</version>
-      <scope>test</scope>
+      <groupId>com.google.firebase</groupId>
+      <artifactId>firebase-admin</artifactId>
+      <version>8.1.0</version>
     </dependency>
   </dependencies>
 

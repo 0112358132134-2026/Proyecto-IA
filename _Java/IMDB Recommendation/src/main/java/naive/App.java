@@ -1,27 +1,30 @@
 package naive;
-import com.google.gson.Gson;
+import com.google.firebase.database.DatabaseReference;
 
-import javax.swing.*;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.*;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 public class App {
 
     private static HttpURLConnection connection;
-    public static void main( String[] args ) {
+    public static void main( String[] args ) throws IOException {
 
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                JFrame burden = new CSV_screen();
-                burden.setSize(300,300);
-                burden.setVisible(true);
-            }
-        });
+        //IMDB_DB firebase = new IMDB_DB();
+        //DatabaseReference users_DB = firebase.connect();
+
+        //users_DB.child("vane").setValueAsync(34);
+        //users_DB.child("osos").setValueAsync(23);
+
+        //Scanner scanner = new Scanner(System.in);
+
+        Thread t=new Thread(new ShowDbChanges());
+        t.run();
+        try {
+            Thread.sleep(100000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
