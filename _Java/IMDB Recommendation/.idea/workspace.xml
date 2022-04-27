@@ -78,7 +78,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1650996281428</updated>
-      <workItem from="1650996283680" duration="25291000" />
+      <workItem from="1650996283680" duration="29095000" />
     </task>
     <servers />
   </component>
@@ -100,10 +100,15 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/naive/functions.java</url>
-          <line>40</line>
+          <line>42</line>
           <option name="timeStamp" value="26" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="java.net.http.HttpHeaders" memberName="headers" />
+      </pinned-members>
+    </pin-to-top-manager>
   </component>
 </project>

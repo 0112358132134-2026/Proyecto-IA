@@ -1,5 +1,7 @@
 package naive;
 import com.google.gson.Gson;
+import com.google.gson.JsonNull;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -52,6 +54,6 @@ public class functions{
 
         HttpResponse<?> respuesta = cliente.send(solicitud, HttpResponse.BodyHandlers.discarding());
         System.out.println(respuesta.statusCode());
-        System.out.println(respuesta.request().toString());
+        System.out.println(respuesta.toString());
     }
 }
