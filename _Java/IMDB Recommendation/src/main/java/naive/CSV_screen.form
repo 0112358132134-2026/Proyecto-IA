@@ -10,13 +10,21 @@
       <component id="ea771" class="javax.swing.JLabel">
         <constraints/>
         <properties>
-          <text value="Pruebita"/>
+          <text value="Nombre"/>
         </properties>
       </component>
       <component id="6d2e6" class="javax.swing.JTextField" binding="textField1" default-binding="true">
         <constraints/>
         <properties>
+          <alignmentY value="0.5"/>
           <columns value="20"/>
+          <selectionEnd value="0"/>
+        </properties>
+      </component>
+      <component id="72a90" class="javax.swing.JLabel">
+        <constraints/>
+        <properties>
+          <text value="Label"/>
         </properties>
       </component>
       <component id="a5644" class="javax.swing.JButton" binding="cargarCSVButton" default-binding="true">
