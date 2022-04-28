@@ -80,7 +80,7 @@
       <updated>1650996281428</updated>
       <workItem from="1650996283680" duration="37643000" />
       <workItem from="1651044037096" duration="649000" />
-      <workItem from="1651087642864" duration="4192000" />
+      <workItem from="1651087642864" duration="27749000" />
     </task>
     <servers />
   </component>
@@ -94,15 +94,28 @@
           <properties class="java.lang.NullPointerException" package="java.lang" />
           <option name="timeStamp" value="28" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/naive/ShowDbChanges.java</url>
-          <line>8</line>
-          <option name="timeStamp" value="34" />
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/naive/functions.java</url>
+          <line>73</line>
+          <properties class="naive.functions" method="userStatus">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="46" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/naive/functions.java</url>
+          <line>105</line>
+          <properties class="naive.functions" method="simplexWithPath">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="51" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/naive/IMDB_DB.java</url>
-          <line>9</line>
-          <option name="timeStamp" value="36" />
+          <url>file://$PROJECT_DIR$/src/main/java/naive/functions.java</url>
+          <line>62</line>
+          <option name="timeStamp" value="41" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
