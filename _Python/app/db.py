@@ -10,7 +10,7 @@ mydb = mysql.connector.connect(
 def SavePreference(user, movie, value):
     try:
         mycursor = mydb.cursor()
-        sql = "INSERT INTO userpreferences (UserId, MovieId, Value) VALUES (%s, %s, %s)"
+        sql = "INSERT INTO user_preferences (UserId, MovieId, Value) VALUES (%s, %s, %s)"
         val = (user, movie, value)
         mycursor.execute(sql, val)
         mydb.commit()
