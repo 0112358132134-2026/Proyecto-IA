@@ -1,55 +1,34 @@
-from flask import Flask, jsonify
-from flask import request
+from flask import Flask, request
+import json
 import db
-
 
 app = Flask(__name__)
 
-@app.route('/ping')
-def ping():
-    return jsonify({'message':'pong'})
+@app.route('/csvExist', methods=['POST'])
+def csvExist():    
+    return db.csvExist()
 
-#--------------- Login
-@app.route('/createUser', methods=['POST'])
-def getPreference():
-    request_data = request.get_json()
+@app.route('/loadCSV', methods=['POST'])
+def loadCSV():
+    response = request.data.decode("utf-8")    
+    csv = json.loads(response)        
+    result = db.loadCSV(csv['file'])
+    return result
 
-    user = request_data['user']
-    password = request_data['password']
+@app.route('/reloadCSV', methods=['POST'])
+def reloadCSV():
+    response = request.data.decode("utf-8")    
+    csv = json.loads(response)    
+    result = db.reloadCSV(csv['file'])
+    return result  
 
-    exists = db.ExistUser(user)
-    if not exists:
-        db.CreateUser(user, password)
-        return 'Usuario registrado exitosamente!!!'
-    else:
-        return 'El usuario ya existe'
-
-@app.route('/getPreferences', methods=['POST'])
-def getPreference():
-    request_data = request.get_json()
-
-    user = request_data['user']
-    result = db.GetPreferences(user)
-    if result is not None:
-        return jsonify(result)
-    else:
-        return 'Error'
-
-@app.route('/insertPreference', methods=['POST'])
-def insertPreference():
-    request_data = request.get_json()
-
-    user = request_data['user']
-    movie = request_data['movie']
-    value = request_data['value']
-    result = db.SavePreference(user, movie, value)
-    if result:
-        return 'Información Guardada Existosamente!!!'
-    else:
-        return 'Error'
-    
+@app.route('/userStatus', methods=['POST'])
+def userStatus():
+    response = request.data.decode("utf-8")    
+    user = json.loads(response)    
+    print(user)
+    status = db.userStatus(user['user'],user['password'],user['option'])
+    return str(status)
 
 if __name__ == '__main__':
-    app.run(debug = True, port = 4000)
-
-
+    app.run(host='0.0.0.0', debug=True, port=8000)

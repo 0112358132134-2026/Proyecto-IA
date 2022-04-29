@@ -49,6 +49,7 @@ def firstUser():
     response = request.data.decode("utf-8")    
     print(response)
     user = json.loads(response)
+    
     print(user)
     
     diccionario = {
