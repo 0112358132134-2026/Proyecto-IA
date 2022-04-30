@@ -14,16 +14,18 @@ public class App {
             while(!optionOK){
                 System.out.println("There is already data loaded, do you want to load a new data? (Yes/No)");
                 str_option = scanner.next().toLowerCase();
-                if(str_option.equals("yes") || str_option.equals(("no"))){
+                if(str_option.equals("yes") || str_option.equals("no") || str_option.equals("n") || str_option.equals("y")){
                     optionOK = true;
                 }
+                fn.clearScreen();
             }
-            if(str_option.equals("yes")){
+            if(str_option.equals("yes") || str_option.equals("y")){
                 boolean validFile = false;
                 while(!validFile){
                     System.out.println("Please enter a file.csv to import new data");
                     String csv_file = scanner.next();
                     validFile = fn.reload_CSV(csv_file);
+                    fn.clearScreen();
                 }
                 System.out.println("The csv file was uploaded successfully");
             }
@@ -34,6 +36,7 @@ public class App {
                 System.out.println("Please enter a file.csv to import data");
                 String csv_file = scanner.next();
                 validFile = fn.load_CSV(csv_file);
+                fn.clearScreen();
             }
             System.out.println("The csv file was uploaded successfully");
         }
@@ -111,7 +114,7 @@ public class App {
                     exit = true;
                     break;
             }
-
+            fn.clearScreen();
             if(((userStatus == 2 && option == 1) || userStatus == 4 || option == 3) && !exit){
                 boolean exitToSecondMenu = false;
                 while(!exitToSecondMenu){
@@ -137,7 +140,7 @@ public class App {
                             }
                         } catch(Exception e){}
                     }
-
+                    fn.clearScreen();
                     switch (option){
                         case 1:
                             System.out.println("Recommendations");
@@ -152,9 +155,8 @@ public class App {
                             fn.printAllMovie(movies);
                             break;
                         case 4:
-                            System.out.println("Rent a movie");
                             // If it is the first time, ask him 10 options
-                            // Like or dislike
+                            fn.rentAMovie();
                             break;
                         case 5:
                             boolean validFile = false;
@@ -169,6 +171,7 @@ public class App {
                             exitToSecondMenu = true;
                             break;
                     }
+                    fn.clearScreen();
                 }
             }
         }

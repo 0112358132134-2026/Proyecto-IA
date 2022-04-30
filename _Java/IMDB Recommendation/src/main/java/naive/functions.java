@@ -70,7 +70,7 @@ public class functions{
             if(results.searchedMovies.size() > 0){
                 System.out.println("These are your results:");
                 for(int i = 0; i < results.searchedMovies.size(); i++){
-                    System.out.println(results.searchedMovies.get(i));
+                    System.out.println((i + 1) + " " + results.searchedMovies.get(i));
                 }
             }
             else{System.out.println("No results found");}
@@ -80,11 +80,11 @@ public class functions{
             while(!optionOK){
                 System.out.println("Do you want to keep search? (Yes/No)");
                 option = scanner.next().toLowerCase();
-                if(option.equals("yes") || option.equals(("no"))){
+                if(option.equals("yes") || option.equals("no") || option.equals("y") || option.equals("n")){
                     optionOK = true;
                 }
             }
-            if(option.equals("no")){ stopSearch = true; }
+            if(option.equals("no") || option.equals("n")){ stopSearch = true; }
         }
     }
     public Movies movieSearch(String name) throws IOException, InterruptedException {
@@ -145,7 +145,6 @@ public class functions{
             }
         }
     }
-
     public int userStatus(String user, String password, int option) throws IOException, InterruptedException {
 
         String JSON = "{\n" +
@@ -173,6 +172,76 @@ public class functions{
                 return 4; //Exist and password is OK
             default:
                 return 0; //Other
+        }
+    }
+
+    public void rentAMovie() throws IOException, InterruptedException {
+        Scanner scanner = new Scanner(System.in);
+        boolean stopSearch = false;
+        while(!stopSearch){
+            System.out.print("Enter a text to search for related movies:");
+            String toSearch = scanner.next();
+            Movies results = movieSearch(toSearch);
+            if(results.searchedMovies.size() > 0){
+                System.out.println("These are your results:");
+                for(int i = 0; i < results.searchedMovies.size(); i++){
+                    System.out.println((i + 1) + " " + results.searchedMovies.get(i));
+                }
+                boolean indexExist = false;
+                int intIndex = -1;
+                while(!indexExist){
+                    System.out.println("Enter the number of the movie you want to rent:");
+                    String index = scanner.next();
+                    try{
+                        intIndex = Integer.parseInt(index);
+                        if(intIndex > 0 && intIndex <= results.searchedMovies.size()){
+                            indexExist = true;
+                        }
+                    }
+                    catch (Exception e){
+                    }
+                }
+                String confirmation = "";
+                boolean confirmOK = false;
+                while(!confirmOK){
+                    System.out.println("Do you want to rent this movie?: " + results.searchedMovies.get(intIndex - 1) + " (Yes/No)");
+                    confirmation = scanner.next().toLowerCase();
+                    if(confirmation.equals("yes") || confirmation.equals("no") || confirmation.equals("y") || confirmation.equals("n")){
+                        confirmOK = true;
+                    }
+                }
+                if(confirmation.equals("yes") || confirmation.equals("y")){
+                    String calfication = "";
+                    boolean calficationOk = false;
+                    while(!calficationOk){
+                        System.out.println("You liked the movie?: " + results.searchedMovies.get(intIndex - 1) + " (Yes/No)");
+                        calfication = scanner.next().toLowerCase();
+                        if(calfication.equals("yes") || calfication.equals("no") || calfication.equals("y") || calfication.equals("n")){
+                            calficationOk = true;
+                        }
+                    }
+                    // Save "Like" or "Dislike"
+                    System.out.println("SIUUUU");
+                }
+            }
+            else{System.out.println("No results found");}
+
+            String option = "";
+            boolean optionOK = false;
+            while(!optionOK){
+                System.out.println("Do you want to keep looking to rent another movie? (Yes/No)");
+                option = scanner.next().toLowerCase();
+                if(option.equals("yes") || option.equals("no") || option.equals("y") || option.equals("n")){
+                    optionOK = true;
+                }
+            }
+            if(option.equals("no") || option.equals("n")){ stopSearch = true; }
+        }
+    }
+
+    public void clearScreen(){
+        for(int i = 0; i <= 1000; i++){
+            System.out.println("");
         }
     }
 

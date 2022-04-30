@@ -65,6 +65,11 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.App" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -86,7 +91,7 @@
       <workItem from="1651306414043" duration="1021000" />
       <workItem from="1651307462831" duration="43000" />
       <workItem from="1651332492149" duration="1133000" />
-      <workItem from="1651333756190" duration="1382000" />
+      <workItem from="1651333756190" duration="11138000" />
     </task>
     <servers />
   </component>
