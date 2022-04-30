@@ -245,6 +245,15 @@ public class functions{
         }
     }
 
+    public static void cls(){
+        try{
+            new ProcessBuilder("cmd","/c","cls").inheritIO().start().waitFor();
+        }
+        catch (Exception e){
+            System.out.println(e);
+        }
+    }
+
     // Unusable functions
     public static Movies GET_MOVIE(){
         Movies _movie = new Movies();
