@@ -44,7 +44,8 @@
     &quot;UI_DESIGNER_EDITOR_MODE.PaletteManager.WIDTH&quot;: &quot;180&quot;,
     &quot;UI_DESIGNER_EDITOR_MODE.UIDesignerToolWindowManager.SHOW&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/68541/Downloads/Firebaseoptions/threetenbp-1.3.3.jar&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/68541/Documents/URL/1er. Ciclo 2022/Inteligencia Artificial/Proyecto/Proyecto-IA/_Java/IMDB Recommendation&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
@@ -64,11 +65,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Application.App" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -82,7 +78,15 @@
       <workItem from="1651044037096" duration="649000" />
       <workItem from="1651087642864" duration="38365000" />
       <workItem from="1651182909743" duration="4169000" />
-      <workItem from="1651198568338" duration="8267000" />
+      <workItem from="1651198568338" duration="10456000" />
+      <workItem from="1651216918338" duration="976000" />
+      <workItem from="1651247052227" duration="3427000" />
+      <workItem from="1651280335207" duration="9488000" />
+      <workItem from="1651297596709" duration="7636000" />
+      <workItem from="1651306414043" duration="1021000" />
+      <workItem from="1651307462831" duration="43000" />
+      <workItem from="1651332492149" duration="1133000" />
+      <workItem from="1651333756190" duration="111000" />
     </task>
     <servers />
   </component>
@@ -96,15 +100,6 @@
           <properties class="java.lang.NullPointerException" package="java.lang" />
           <option name="timeStamp" value="28" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/naive/functions.java</url>
-          <line>58</line>
-          <properties class="naive.functions" method="userStatus">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="35" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <pin-to-top-manager>
@@ -112,5 +107,10 @@
         <PinnedItemInfo parentTag="java.net.http.HttpHeaders" memberName="headers" />
       </pinned-members>
     </pin-to-top-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/IMDB_Recommendation$App.ic" NAME="App Coverage Results" MODIFIED="1651284717875" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>naive.*</FILTER>
+    </SUITE>
   </component>
 </project>

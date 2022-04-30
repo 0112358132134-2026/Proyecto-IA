@@ -1,4 +1,5 @@
 import mysql.connector
+from numpy import moveaxis
 import pandas as pd
 
 mydb = mysql.connector.connect(
@@ -10,18 +11,64 @@ mydb = mysql.connector.connect(
 
 def csvExist():
     mycursor = mydb.cursor()
-    sql = "SELECT id FROM csv LIMIT 1"
+    sql = "SELECT movie_title FROM csv LIMIT 1"
     mycursor.execute(sql)
     csvExist = mycursor.fetchall()
     if len(csvExist) == 1:
         return "1"
     return "0"
 
+def loadCSV(file):
+    try:
+        df = pd.read_csv(file)
+    except:
+        return "0"
+    df = pd.read_csv(file)    
+    counter = 0    
+    for i in range(len(df.index)):
+        mycursor = mydb.cursor()
+        try:
+            sql = "INSERT INTO csv (movie_title, num_voted_users,imdb_score,director_name,actor_1_name,actor_2_name,actor_3_name,genres,plot_keywords) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            val = (df.iloc[counter]['movie_title'],str(df.iloc[counter]['num_voted_users']),str(df.iloc[counter]['imdb_score']),df.iloc[counter]['director_name'],df.iloc[counter]['actor_1_name'],df.iloc[counter]['actor_2_name'],df.iloc[counter]['actor_3_name'],df.iloc[counter]['genres'],df.iloc[counter]['plot_keywords'])
+            mycursor.execute(sql, val)
+            mydb.commit()
+            counter += 1                        
+        except:            
+            counter += 1
+        if counter == 5000:
+            break           
+    return "1" 
+
+def reloadCSV(file):        
+    try:
+        df = pd.read_csv(file)
+    except:
+        return "0"
+
+    df = pd.read_csv(file)
+    mycursor = mydb.cursor()
+    sql = "DELETE FROM csv"    
+    mycursor.execute(sql)
+    mydb.commit()
+
+    counter = 0
+    for i in range(len(df.index)):
+        mycursor = mydb.cursor()
+        try:
+            sql = "INSERT INTO csv (movie_title, num_voted_users,imdb_score,director_name,actor_1_name,actor_2_name,actor_3_name,genres,plot_keywords) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            val = (df.iloc[counter]['movie_title'],str(df.iloc[counter]['num_voted_users']),str(df.iloc[counter]['imdb_score']),df.iloc[counter]['director_name'],df.iloc[counter]['actor_1_name'],df.iloc[counter]['actor_2_name'],df.iloc[counter]['actor_3_name'],df.iloc[counter]['genres'],df.iloc[counter]['plot_keywords'])
+            mycursor.execute(sql, val)
+            mydb.commit()       
+            counter += 1            
+        except:            
+            counter += 1        
+        if counter == 5000:            
+            break    
+    return "1"
+
 def userStatus(user, password, option):
 
-    mycursor = mydb.cursor()
-    result = 0
-
+    mycursor = mydb.cursor()    
     query = f"SELECT User FROM user WHERE User = '{user}' LIMIT 1"                    
     mycursor.execute(query)
     userExist = mycursor.fetchall()
@@ -29,15 +76,7 @@ def userStatus(user, password, option):
     if option == 1:
                         
         if len(userExist) == 1:
-            return 1                    
-        #query = f"SELECT * FROM User"
-        #mycursor.execute(query)
-        #users = mycursor.fetchall()
-
-        #if len(users) > 0 and len(userExist) == 0:            
-        #    result = 2
-        #elif len(users) == 0 and len(userExist) == 0:            
-        #    result = 3
+            return 1                            
         
         query= "INSERT INTO user (User, Password) VALUES (%s, %s)"
         val = (user,password)
@@ -58,71 +97,23 @@ def userStatus(user, password, option):
         else:
             return 3
 
-def loadCSV(file):
-    try: #Debemos agregar que cargue a pesar de errores
-        df = pd.read_csv(file)        
-        counter = 0
-        for i in range(len(df.index)):
-
-            mycursor = mydb.cursor()
-            sql = "INSERT INTO csv (id, other) VALUES (%s, %s)"
-            val = (df.iloc[counter]['movie_title'],df.iloc[counter]['imdb_score'])
-            mycursor.execute(sql, val)
-            mydb.commit()
-
-            counter += 1
-            if counter == 5000:
-                break
-        return "1"
-    except:
-        return "0"
-
-def reloadCSV(file):        
-    try:
-        df = pd.read_csv(file)
-        mycursor = mydb.cursor()
-        sql = "INSERT INTO csv (id, other) VALUES (%s, %s)"
-        val = (df.iloc[0]['movie_title'],df.iloc[0]['imdb_score'])
-        mycursor.execute(sql, val)
-        mydb.commit()
-    except:
-        return "0"
-    df = pd.read_csv(file)
+def showAllMovies():
     mycursor = mydb.cursor()
-    sql = "DELETE FROM csv"    
+    sql = "SELECT movie_title, director_name, genres, imdb_score FROM csv"
     mycursor.execute(sql)
-    mydb.commit()
+    movies = mycursor.fetchall()
 
-    counter = 0
-    for i in range(len(df.index)):
-        mycursor = mydb.cursor()
-        sql = "INSERT INTO csv (id, other) VALUES (%s, %s)"
-        val = (df.iloc[counter]['movie_title'],df.iloc[counter]['imdb_score'])
-        mycursor.execute(sql, val)
-        mydb.commit()
+    if len(movies) == 0:
+        return "0"           
+    return movies
 
-        counter += 1
-        if counter == 5000:
-            break
-    return "1"
-
-def SavePreference(user, movie, value):
-    try:
-        mycursor = mydb.cursor()
-        sql = "INSERT INTO user_preferences (UserId, MovieId, Value) VALUES (%s, %s, %s)"
-        val = (user, movie, value)
-        mycursor.execute(sql, val)
-        mydb.commit()
-        return True
-    except:
-        return False
-
-def GetPreferences(user):
-    try:
-        mycursor = mydb.cursor()
-        sql = f"SELECT * FROM user_preferences WHERE UserId ='{user}'"
-        mycursor.execute(sql)
-        myresult = mycursor.fetchall()
-        return myresult
-    except:
-        return None
+def movieSearch(name):
+    mycursor = mydb.cursor()
+    sql = f"SELECT movie_title FROM csv WHERE movie_title LIKE '%{name}%'"
+    mycursor.execute(sql)
+    results = mycursor.fetchall()
+    movies = []
+    for result in results:            
+        for movie in result:
+            movies.append(movie)
+    return movies

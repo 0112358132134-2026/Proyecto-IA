@@ -40,7 +40,6 @@ public class App {
 
         boolean exit = false;
         while(!exit){
-
             System.out.println("--------------------");
             System.out.println("WELCOME TO IMDB 5000");
             System.out.println("--------------------");
@@ -62,12 +61,11 @@ public class App {
                 } catch(Exception e){}
             }
 
-            String user = "";
-            String password = "";
+            String user;
+            String password;
             int userStatus = -1;
 
             switch (option){
-
                 case 1:
 
                     System.out.print("User:");
@@ -114,7 +112,7 @@ public class App {
                     break;
             }
 
-            if(((userStatus == 2 && option == 1) || userStatus == 4 || option == 3) && exit == false){
+            if(((userStatus == 2 && option == 1) || userStatus == 4 || option == 3) && !exit){
                 boolean exitToSecondMenu = false;
                 while(!exitToSecondMenu){
                     System.out.println("--------------------");
@@ -122,8 +120,10 @@ public class App {
                     System.out.println("--------------------");
                     System.out.println("1. View recommendations");
                     System.out.println("2. Search movie");
-                    System.out.println("3. Upload another csv file");
-                    System.out.println("4. Exit");
+                    System.out.println("3. Show all movies");
+                    System.out.println("4. Rent a movie");
+                    System.out.println("5. Upload another csv file");
+                    System.out.println("6. Exit");
                     System.out.println("--------------------");
 
                     optionOK = false;
@@ -131,7 +131,7 @@ public class App {
                         try{
                             System.out.print("Please enter a option:");
                             str_option = scanner.next();
-                            if(str_option.equals("1") || str_option.equals("2") || str_option.equals("3") || str_option.equals("4")){
+                            if(str_option.equals("1") || str_option.equals("2") || str_option.equals("3") || str_option.equals("4") || str_option.equals("5") || str_option.equals("6")) {
                                 optionOK = true;
                                 option = Integer.parseInt(str_option);
                             }
@@ -141,11 +141,22 @@ public class App {
                     switch (option){
                         case 1:
                             System.out.println("Recommendations");
+                            //Show the simplex algorithm if not exist user data
+                            //Show the complex algorithm if exist user data
                             break;
                         case 2:
-                            System.out.println("Search");
+                            fn.search();
                             break;
                         case 3:
+                            Movies movies = fn.showAllMovies();
+                            fn.printAllMovie(movies);
+                            break;
+                        case 4:
+                            System.out.println("Rent a movie");
+                            // If it is the first time, ask him 10 options
+                            // Like or dislike
+                            break;
+                        case 5:
                             boolean validFile = false;
                             while(!validFile){
                                 System.out.println("Please enter a file.csv to import a new data");
@@ -154,7 +165,7 @@ public class App {
                             }
                             System.out.println("The csv file was uploaded successfully");
                             break;
-                        case 4:
+                        case 6:
                             exitToSecondMenu = true;
                             break;
                     }

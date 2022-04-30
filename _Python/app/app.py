@@ -18,7 +18,7 @@ def loadCSV():
 @app.route('/reloadCSV', methods=['POST'])
 def reloadCSV():
     response = request.data.decode("utf-8")    
-    csv = json.loads(response)    
+    csv = json.loads(response)       
     result = db.reloadCSV(csv['file'])
     return result  
 
@@ -29,6 +29,26 @@ def userStatus():
     print(user)
     status = db.userStatus(user['user'],user['password'],user['option'])
     return str(status)
+
+@app.route('/showAllMovies', methods=['POST'])
+def showAllMovies():            
+    movies = db.showAllMovies()
+    result = {
+        "allMovies" : movies,
+        "searchedMovies" : []
+    }    
+    return result
+
+@app.route('/movieSearch', methods=['POST'])
+def movieSearch():
+    response = request.data.decode("utf-8")    
+    toSearch = json.loads(response)    
+    result = db.movieSearch(toSearch['name'])    
+    movies = {
+        "allMovies" : [],
+        "searchedMovies" : result
+    }
+    return movies
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True, port=8000)

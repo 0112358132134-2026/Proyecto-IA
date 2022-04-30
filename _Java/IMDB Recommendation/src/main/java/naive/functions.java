@@ -10,8 +10,11 @@ import java.net.URLConnection;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.List;
+import java.util.Scanner;
 public class functions{
 
+    // CSV functions
     public boolean csvExist() throws IOException, InterruptedException {
 
         HttpClient client = HttpClient.newHttpClient();
@@ -23,11 +26,10 @@ public class functions{
         HttpResponse<String> response = client.send(request,HttpResponse.BodyHandlers.ofString());
         if (response.body().equals("1")){ return true; } return false;
     }
-
     public boolean load_CSV(String file) throws IOException, InterruptedException {
 
         String JSON = "{\n" +
-                "  \"file\": " + "\"" + file + "\"" + "\n" +
+                "  \"file\": " + "\"" + file.replace('\\','/') + "\"" + "\n" +
                 "}";
 
         HttpClient client = HttpClient.newHttpClient();
@@ -39,11 +41,10 @@ public class functions{
         HttpResponse<String> response = client.send(request,HttpResponse.BodyHandlers.ofString());
         if (response.body().equals("1")){ return true; } return false;
     }
-
     public boolean reload_CSV(String file) throws IOException, InterruptedException{
 
         String JSON = "{\n" +
-                "  \"file\": " + "\"" + file + "\"" + "\n" +
+                "  \"file\": " + "\"" + file.replace('\\','/') + "\"" + "\n" +
                 "}";
 
         HttpClient client = HttpClient.newHttpClient();
@@ -56,6 +57,95 @@ public class functions{
 
         if (response.body().equals("1")){ return true; } return false;
     }
+
+    // Search functions
+    public void search() throws IOException, InterruptedException {
+
+        Scanner scanner = new Scanner(System.in);
+        boolean stopSearch = false;
+        while(!stopSearch){
+            System.out.print("Enter a text to search for related movies:");
+            String toSearch = scanner.next();
+            Movies results = movieSearch(toSearch);
+            if(results.searchedMovies.size() > 0){
+                System.out.println("These are your results:");
+                for(int i = 0; i < results.searchedMovies.size(); i++){
+                    System.out.println(results.searchedMovies.get(i));
+                }
+            }
+            else{System.out.println("No results found");}
+
+            String option = "";
+            boolean optionOK = false;
+            while(!optionOK){
+                System.out.println("Do you want to keep search? (Yes/No)");
+                option = scanner.next().toLowerCase();
+                if(option.equals("yes") || option.equals(("no"))){
+                    optionOK = true;
+                }
+            }
+            if(option.equals("no")){ stopSearch = true; }
+        }
+    }
+    public Movies movieSearch(String name) throws IOException, InterruptedException {
+
+        String JSON = "{\n" +
+                "  \"name\": " + "\"" + name + "\"" + "\n" +
+                "}";
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://127.0.0.1:8000/movieSearch"))
+                .POST(HttpRequest.BodyPublishers.ofString(JSON))
+                .build();
+
+        HttpResponse<String> response = client.send(request,HttpResponse.BodyHandlers.ofString());
+
+        Gson g = new Gson();
+        Movies movies = g.fromJson(response.body(), Movies.class);
+        return movies;
+    }
+
+    // Display functions
+    public Movies showAllMovies() throws IOException, InterruptedException{
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://127.0.0.1:8000/showAllMovies"))
+                .POST(HttpRequest.BodyPublishers.noBody())
+                .build();
+
+        HttpResponse<String> response = client.send(request,HttpResponse.BodyHandlers.ofString());
+        Gson g = new Gson();
+        Movies movies = g.fromJson(response.body(), Movies.class);
+        return movies;
+    }
+    public void printAllMovie(Movies movies){
+
+        if(movies != null){
+            List<List<String>> listMovies = movies.allMovies;
+            for(int i = 0; i < listMovies.size(); i++){
+                System.out.print((i + 1) + ". ");
+                for(int j = 0; j < listMovies.get(i).size(); j++){
+                    String value = listMovies.get(i).get(j);
+                    if(j == 0){
+                        System.out.print(String.format("%1$-52s",value));
+                    }
+                    else if(j == 1){
+                        System.out.print(String.format("%1$-35s",value));
+                    }
+                    else if(j == 2){
+                        System.out.print(String.format("%1$-62s",value));
+                    }
+                    else if(j == 3){
+                        System.out.print(String.format("%1$-5s",value));
+                    }
+                }
+                System.out.println();
+            }
+        }
+    }
+
     public int userStatus(String user, String password, int option) throws IOException, InterruptedException {
 
         String JSON = "{\n" +
@@ -85,8 +175,10 @@ public class functions{
                 return 0; //Other
         }
     }
-    public static movie GET_MOVIE(){
-        movie _movie = new movie();
+
+    // Unusable functions
+    public static Movies GET_MOVIE(){
+        Movies _movie = new Movies();
         try {
             URL url = new URL("http://127.0.0.1:8000/operate");
             URLConnection connection = url.openConnection();
@@ -97,7 +189,7 @@ public class functions{
                 string += line;
             }
             Gson g = new Gson();
-            _movie= g.fromJson(string,movie.class);
+            _movie= g.fromJson(string, Movies.class);
             reader.close();
         } catch (MalformedURLException me) {
             System.err.println("MalformedURLException: " + me);
@@ -105,27 +197,5 @@ public class functions{
             System.err.println("IOException:  " + ioe);
         }
         return _movie;
-    }
-    public String simplexAlgorithm(String user, String path) throws IOException, InterruptedException{
-
-        String JSON = "{\n" +
-                "  \"user\": " + "\"" + user + "\"" + ",\n" +
-                "  \"password\": " + "\"" + path + "\"" +  "\n" +
-                "}";
-
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://127.0.0.1:8000/firstUser"))
-                .POST(HttpRequest.BodyPublishers.ofString(JSON))
-                .build();
-
-        HttpResponse<String> response = client.send(request,HttpResponse.BodyHandlers.ofString());
-        System.out.println(response.body());
-
-        Gson g = new Gson();
-        movie mov = new movie();
-        mov = g.fromJson(response.body(),movie.class);
-
-        return response.body();
     }
 }
