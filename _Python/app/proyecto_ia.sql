@@ -80,3 +80,17 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+/*Creación de la tabla csv para guardar la información*/
+
+CREATE TABLE `csv` (
+	`movie_title` VARCHAR(50) PRIMARY KEY,
+	`num_voted_users` VARCHAR(50) NOT NULL,
+	`imdb_score` VARCHAR(5) NOT NULL,
+	`director_name` VARCHAR(50) NOT NULL,
+	`actor_1_name` VARCHAR(50) NOT NULL,
+	`actor_2_name` VARCHAR(50) NOT NULL,
+	`actor_3_name` VARCHAR(50) NOT NULL,
+	`genres` VARCHAR(100) NOT NULL
+)
