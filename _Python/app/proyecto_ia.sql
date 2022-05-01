@@ -42,7 +42,7 @@ CREATE TABLE `user_preferences` (
   `Id` int(11) NOT NULL,
   `UserId` varchar(50) NOT NULL,
   `MovieId` varchar(200) NOT NULL,
-  `Value` double DEFAULT NULL
+  `Value` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
