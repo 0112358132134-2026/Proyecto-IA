@@ -1,7 +1,6 @@
 import mysql.connector
 import pandas as pd
 from sympy import false
-import preferences_algorithms as pa
 
 mydb = mysql.connector.connect(
   host="localhost",
@@ -227,8 +226,8 @@ def UserPreferences(user: object) -> object:
 
 def AllMoviesInfo():
     mycursor = mydb.cursor()
-    sql = "SELECT movie_title, director_name, genres, CONCAT(actor_1_name,", ", actor_2_name,", ", actor_3_name) AS actors," \
-          "plot_keywords, imdb_score, num_voted_users FROM csv"
+    sql = "SELECT movie_title, director_name, genres, CONCAT(actor_1_name,', ', actor_2_name,', ', actor_3_name) AS actors," \
+          "plot_keywords, imdb_score, num_voted_users, soup FROM csv"
     mycursor.execute(sql)
     movies = mycursor.fetchall()
 
