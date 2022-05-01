@@ -1,5 +1,11 @@
 import pandas as pd
-def newinformation(director, actors, genre, like):
-    #Actualizar Totales Usuario
-    #Traer directores del usuario con sus frecuencias
+
+from db import UserPreferences, AllMoviesInfo
+
+
+def GetRecommendation(user):
+    RatedMovies = UserPreferences(user)
+    allMovies = AllMoviesInfo()
+    for movie in RatedMovies:
+
     return 0
