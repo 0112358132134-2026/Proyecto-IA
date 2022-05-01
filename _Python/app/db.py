@@ -117,3 +117,14 @@ def movieSearch(name):
         for movie in result:
             movies.append(movie)
     return movies
+
+def UserPreferences(user):
+    mycursor = mydb.cursor()
+    sql = f"SELECT MovieId, Value FROM user_preferences WHERE UserId ='{user}'"
+    mycursor.execute(sql)
+    results = mycursor.fetchall()
+    movies = []
+    for result in results:
+        for movie in result:
+            movies.append(movie)
+    return movies
