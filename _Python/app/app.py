@@ -1,6 +1,7 @@
 from flask import Flask, request
 import json
 import db
+from complex_algorithms import GetRecommendation
 
 app = Flask(__name__)
 
@@ -51,4 +52,5 @@ def movieSearch():
     return movies
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True, port=8000)
+    #app.run(host='0.0.0.0', debug=True, port=8000)
+    print(GetRecommendation("jdeleon"))

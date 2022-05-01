@@ -118,14 +118,14 @@ def movieSearch(name):
             movies.append(movie)
     return movies
 
-def UserPreferences(user: object) -> object:
+def UserPreferences(user):
     mycursor = mydb.cursor()
     sql = f"SELECT MovieId, Value FROM user_preferences WHERE UserId ='{user}'"
     mycursor.execute(sql)
     results = mycursor.fetchall()
     Diccionario = {}
     for result in results:
-        Diccionario[result[0]] = result[1]
+        Diccionario[result[0]] = [result[1]]
     return Diccionario
 
 def AllMoviesInfo():
