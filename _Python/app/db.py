@@ -145,75 +145,6 @@ def userHasLikes(user):
         return "1"
     return "0"
 
-def simplexAlgorithm():
-    mycursor = mydb.cursor()
-    sql = f"SELECT movie_title,num_voted_users,imdb_score FROM csv"
-    mycursor.execute(sql)
-    registers = mycursor.fetchall()
-    newRegisters = []
-    for register in registers:
-        _newRegister = []
-        _newRegister.append(register[0])
-        _newRegister.append(int(register[1]))
-        _newRegister.append(float(register[2]))
-        newRegisters.append(_newRegister)
-
-    # Load Movies Metadata
-    metadata = pd.DataFrame(newRegisters, columns=['movie_title','num_voted_users','imdb_score'])
-
-    #Calcular la media del promedio de votos
-    C = metadata['imdb_score'].mean()
-    print(C)
-
-    # Calcular el número nínimo de votos requeridos para ser aceptado
-    m = metadata['num_voted_users'].quantile(0.90)
-    print(m)
-
-    # Function that computes the weighted rating of each movie
-    def weighted_rating(x, m=m, C=C):
-        v = x['num_voted_users']
-        R = x['imdb_score']
-        # Calculation based on the IMDB formula
-        return (v/(v+m) * R) + (m/(m+v) * C)
-
-    # Define a new feature 'score' and calculate its value with `weighted_rating()`
-    q_movies = metadata.copy().loc[metadata['num_voted_users'] >= m]
-    q_movies['score'] = q_movies.apply(weighted_rating, axis=1)
-
-    #Sort movies based on score calculated above
-    q_movies = q_movies.sort_values('score', ascending=False)
-    
-    #Return the top 15 movies
-    names = []
-    usersVotes = []
-    imdbScore = []
-    score = []
-    qmovies2 = q_movies[['movie_title', 'num_voted_users', 'imdb_score', 'score']].head(25)
-    for value in qmovies2['movie_title']:    
-        names.append(value)
-    for value in qmovies2['num_voted_users']:    
-        usersVotes.append(value)
-    for value in qmovies2['imdb_score']:    
-        imdbScore.append(value)
-    for value in qmovies2['score']:    
-        score.append(value)
-    movies = []
-    counter = 0
-    while counter < 25:
-        movie = []
-        movie.append(names[counter])
-        movie.append(str(usersVotes[counter]))
-        movie.append(str(imdbScore[counter]))
-        movie.append(str(score[counter]))
-        movies.append(movie)
-        counter += 1
-    return movies
-
-def showRecommendations(exist):
-    if exist == 0:
-        return simplexAlgorithm()
-    return "Algoritmo complejo"
-
 def UserPreferences(user: object) -> object:
     mycursor = mydb.cursor()
     sql = f"SELECT MovieId, Value FROM user_preferences WHERE UserId ='{user}'"
@@ -221,13 +152,13 @@ def UserPreferences(user: object) -> object:
     results = mycursor.fetchall()
     Diccionario = {}
     for result in results:
-        Diccionario[result[0]] = [result[1]]
+        Diccionario[result[0]] = result[1]
     return Diccionario
 
 def AllMoviesInfo():
     mycursor = mydb.cursor()
-    sql = "SELECT movie_title, director_name, genres, actor_1_name, actor_2_name, " \
-          "actor_3_name, plot_keywords, imdb_score, num_voted_users FROM csv"
+    sql = "SELECT movie_title, director_name, genres, CONCAT(actor_1_name,", ", actor_2_name,", ", actor_3_name) AS actors," \
+          "plot_keywords, imdb_score, num_voted_users FROM csv"
     mycursor.execute(sql)
     movies = mycursor.fetchall()
 

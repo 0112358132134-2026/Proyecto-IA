@@ -2,149 +2,109 @@ import pandas as pd
 
 from db import UserPreferences, AllMoviesInfo
 
-def GetRecommendation(user):
+def showRecommendations(exist, user):
+    if exist == 0:
+        #convertir Lista de listas a DataFrame
+        metadata = pd.DataFrame(newReg, columns=['Movie Title','Director', 'Genres','Actors','keywords','IMDB score','User votes'])
+        #Algoritmo Simple
+        newReg = ToSimplexFormat(metadata)
+        return simplexAlgorithm(newReg)
+    else:
+        return simplexAlgorithm(ComplexAlgorithm(user))
+
+def ToSimplexFormat(registers):
+    newRegisters = []
+    for register in registers:
+        _newRegister = []
+        #Title, Director, Genres, Actors, KeyWords
+        _newRegister.append(register[0], register[1], register[2], register[3], register[4])
+        #imdb_score
+        _newRegister.append(int(register[5]))
+        #num voted users
+        _newRegister.append(float(register[6]))
+        #soup
+        _newRegister.append(register[7])
+        #Se agrega a la lista de listas
+        newRegisters.append(_newRegister)
+    return newRegisters
+
+def simplexAlgorithm(newReg):
+    #Calcular la media del promedio de votos
+    C = metadata['IMDB score'].mean()
+    print(C)
+
+    # Calcular el número nínimo de votos requeridos para ser aceptado
+    m = metadata['User votes'].quantile(0.90)
+    print(m)
+
+    # Function that computes the weighted rating of each movie
+    def weighted_rating(x, m=m, C=C):
+        v = x['User votes']
+        R = x['IMDB score']
+        # Calculation based on the IMDB formula
+        return (v/(v+m) * R) + (m/(m+v) * C)
+
+    # Define a new feature 'score' and calculate its value with `weighted_rating()`
+    q_movies = metadata.copy().loc[metadata['User votes'] >= m]
+    q_movies['score'] = q_movies.apply(weighted_rating, axis=1)
+
+    #Sort movies based on score calculated above
+    q_movies = q_movies.sort_values('score', ascending=False)
+
+    #Return the top 15 movies
+    names = []
+    usersVotes = []
+    imdbScore = []
+    score = []
+    qmovies2 = q_movies[['Movie Title','Director', 'Genres','Actors','keywords','IMDB score','User votes', 'score']].head(25)
+    #for value in qmovies2['Movie Title']:
+    #    names.append(value)
+    #for value in qmovies2['User votes']:
+    #    usersVotes.append(value)
+    #for value in qmovies2['IMDB score']:
+    #    imdbScore.append(value)
+    #for value in qmovies2['score']:
+    #    score.append(value)
+    movies = []
+    #counter = 0
+    #while counter < 25:
+    #    movie = []
+    #    movie.append(names[counter])
+    #    movie.append(str(usersVotes[counter]))
+    #    movie.append(str(imdbScore[counter]))
+    #    movie.append(str(score[counter]))
+    #    movies.append(movie)
+    #    counter += 1
+    for i in range(len(qmovies2)):
+        movie = [qmovies2.loc[i,'Movie Title'],
+        qmovies2.loc[i,'Director'],
+        qmovies2.loc[i,'Genres'],
+        qmovies2.loc[i,'Actors'],
+        qmovies2.loc[i,'keywords'],
+        qmovies2.loc[i,'IMDB score'],
+        qmovies2.loc[i,'User votes'],
+        qmovies2.loc[i,'score'],
+        ]
+        movies.append(movie)
+        #print("Total income in "+ df.loc[i,"Date"]+ " is:"+str(df.loc[i,"Income_1"]+df.loc[i,"Income_2"]))
+    return movies
+
+def ComplexAlgorithm(user):
     RatedMovies = UserPreferences(user)
     allMovies = AllMoviesInfo()
-    ratedmoviescount = len(RatedMovies.keys())
+    #Soups
+    LikedMoviesSoups = []
+    UnlikedMoviesSoups = []
     #Get Info
     for movie in allMovies:
         if movie[0] in RatedMovies.keys():
-            #Director
-            RatedMovies[movie[0]].append(movie[1])
-            #Genres
-            RatedMovies[movie[0]].append(movie[2])
-            #Actor1
-            RatedMovies[movie[0]].append(movie[3])
-            #Actor2
-            RatedMovies[movie[0]].append(movie[4])
-            #Actor3
-            RatedMovies[movie[0]].append(movie[5])
-            #keywords
-            RatedMovies[movie[0]].append(movie[6])
-            #imdb score
-            RatedMovies[movie[0]].append(movie[7])
-            #num voted users
-            RatedMovies[movie[0]].append(movie[8])
-    resultD=DirectorFreq(RatedMovies)
-    likedmoviescount = resultD[0]
-    Directors = resultD[1]
-    Actors=ActorFreq(RatedMovies)
-    Genres=GenreFreq(RatedMovies)
-    KeyWords=KeyWordFreq(RatedMovies)
-    Recommended = Probabilities(allMovies,Directors,Actors,Genres,KeyWords,likedmoviescount, ratedmoviescount,RatedMovies)
-    #print(sorted(allMovies, key=lambda movie: movie[9]))
-    df = pd.DataFrame(Recommended,columns=['like', 'director', 'genres', 'actor1','actor2', 'actor3', 'keywords', 'imdb score', 'num voted users','prob'])
-    q_movies = df.sort_values('prob', ascending=False)
-    return q_movies.head(20)
-
-def Probabilities(allMovies,Directors,Actors,Genres,KeyWords,likedmoviescount, ratedmoviescount,RatedMovies):
-    RecommendedMovies = []
-    for movie in allMovies:
-        movie= list(movie)
-        if movie[0] not in RatedMovies.keys():
-            DirectorProb = NaiveBayes(Directors,movie[1].lower().replace(" ", ""),likedmoviescount, ratedmoviescount,2)
-            GenresProb = 1
-            for genre in movie[2].split("|"):
-                GenresProb*=NaiveBayes(Genres,genre.lower().replace(" ", ""),likedmoviescount, ratedmoviescount,2)
-            Actor1Prob = NaiveBayes(Actors,movie[3].lower().replace(" ", ""),likedmoviescount, ratedmoviescount,2)
-            Actor2Prob = NaiveBayes(Actors,movie[4].lower().replace(" ", ""), likedmoviescount, ratedmoviescount,2)
-            Actor3Prob = NaiveBayes(Actors,movie[5].lower().replace(" ", ""), likedmoviescount, ratedmoviescount,2)
-            KeyWordsProb = 1
-            for keyword in movie[6].split("|"):
-                KeyWordsProb*=NaiveBayes(KeyWords,keyword.lower().replace(" ", ""), likedmoviescount, ratedmoviescount,2)
-            movie.append(DirectorProb*GenresProb*Actor1Prob*Actor2Prob*Actor3Prob*KeyWordsProb)
-            RecommendedMovies.append(movie)
-    return RecommendedMovies
-
-def NaiveBayes(Dictio, Evidence,likedmoviescount, ratedmoviescount, alpha):
-    numerator = 1
-    denominator = 1
-    if Evidence in Dictio.keys():
-        if Dictio[Evidence][0] != 0:
-            numerator = (Dictio[Evidence][0]/likedmoviescount) * (likedmoviescount / ratedmoviescount)
-            denominator = numerator + (Dictio[Evidence][1]/(ratedmoviescount-likedmoviescount)) * ((ratedmoviescount - likedmoviescount) / ratedmoviescount)
-        else:
-            numerator = alpha
-            denominator = (ratedmoviescount) + (2 * alpha)
-    else:
-        numerator = alpha
-        denominator = (ratedmoviescount) + (2 * alpha)
-    return numerator/denominator
-
-def DirectorFreq(RatedMovies):
-    Directors = {}
-    likedmoviescount = 0
-    for key in RatedMovies.keys():
-        like = RatedMovies[key][0]
-        director = RatedMovies[key][1].lower().replace(" ", "")
-        if director in Directors.keys():
-            if like == 1:
-                Directors[director][0] += 1
-                likedmoviescount += 1
+            if RatedMovies[movie[0]] == '1':
+                LikedMoviesSoups.append(movie[7])
             else:
-                Directors[director][1] += 1
-        else:
-            if like == 1:
-                Directors[director]= [1,0]
-                likedmoviescount += 1
-            else:
-                Directors[director] = [0, 1]
-    return [likedmoviescount, Directors]
+                UnlikedMoviesSoups.append(movie[7])
+    #DataFrame de todas las pelis
+    df = pd.DataFrame(RatedMovies,columns=['Movie Title','Director', 'Genres','Actors','keywords','IMDB score','User votes', 'score'])
+    #Algoritmo ()
 
-def ActorFreq(RatedMovies):
-    Actors = {}
-    for key in RatedMovies.keys():
-        like = RatedMovies[key][0]
-        cont = 3
-        while cont < 6:
-            actor = RatedMovies[key][cont].lower().replace(" ", "")
-            if actor in Actors.keys():
-                if like == 1:
-                    Actors[actor][0] += 1
-                else:
-                    Actors[actor][1] += 1
-            else:
-                if like == 1:
-                    Actors[actor] = [1, 0]
-                else:
-                    Actors[actor] = [0, 1]
-            cont += 1
-    return Actors
-
-def GenreFreq(RatedMovies):
-    Genres = {}
-    for key in RatedMovies.keys():
-        like = RatedMovies[key][0]
-        genres = RatedMovies[key][2].split("|")
-        for genre in genres:
-            genre = genre.lower().replace(" ", "")
-            if genre in Genres.keys():
-                if like == 1:
-                    Genres[genre][0] += 1
-                else:
-                    Genres[genre][1] += 1
-            else:
-                if like == 1:
-                    Genres[genre] = [1, 0]
-                else:
-                    Genres[genre] = [0, 1]
-    return Genres
-def KeyWordFreq(RatedMovies):
-    KeyWords={}
-    for key in RatedMovies.keys():
-        like = RatedMovies[key][0]
-        keywords = RatedMovies[key][6].split("|")
-        for keyword in keywords:
-            keyword = keyword.lower().replace(" ", "")
-            if keyword in KeyWords.keys():
-                if like == 1:
-                    KeyWords[keyword][0] += 1
-                else:
-                    KeyWords[keyword][1] += 1
-            else:
-                if like == 1:
-                    KeyWords[keyword] = [1, 0]
-                else:
-                    KeyWords[keyword] = [0, 1]
-    return KeyWords
-print(GetRecommendation("jdeleon"))
+    #q_movies = df.sort_values('prob', ascending=False)
+    return 'Primeras pelis recomendadas en un DataFrame'
