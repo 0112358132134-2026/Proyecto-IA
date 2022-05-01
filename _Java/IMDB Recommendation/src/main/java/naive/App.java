@@ -6,6 +6,7 @@ public class App {
     private static final functions fn = new functions();
     public static void main( String[] args ) throws IOException, InterruptedException {
 
+        fn.clearScreen();
         boolean csvExists = fn.csvExist();
         boolean optionOK = false;
         String str_option = "";
@@ -17,7 +18,7 @@ public class App {
                 if(str_option.equals("yes") || str_option.equals("no") || str_option.equals("n") || str_option.equals("y")){
                     optionOK = true;
                 }
-                fn.cls();
+                fn.clearScreen();
             }
             if(str_option.equals("yes") || str_option.equals("y")){
                 boolean validFile = false;
@@ -43,17 +44,16 @@ public class App {
 
         boolean exit = false;
         while(!exit){
-            System.out.println("--------------------");
-            System.out.println("WELCOME TO IMDB 5000");
-            System.out.println("--------------------");
-            System.out.println("1. Create user");
-            System.out.println("2. Log in");
-            System.out.println("3. Exit");
-            System.out.println("--------------------");
-
             int option = -1;
             optionOK = false;
             while(!optionOK){
+                System.out.println("--------------------");
+                System.out.println("WELCOME TO IMDB 5000");
+                System.out.println("--------------------");
+                System.out.println("1. Create user");
+                System.out.println("2. Log in");
+                System.out.println("3. Exit");
+                System.out.println("--------------------");
                 try{
                     System.out.print("Please enter a option:");
                     str_option = scanner.next();
@@ -62,9 +62,10 @@ public class App {
                         option = Integer.parseInt(str_option);
                     }
                 } catch(Exception e){}
+                fn.clearScreen();
             }
 
-            String user;
+            String user = "";
             String password;
             int userStatus = -1;
             String information = "";
@@ -80,11 +81,11 @@ public class App {
                     catch(Exception e){System.out.println(e.getMessage());}
 
                     if(userStatus == 1){
-                        System.out.println("This user already exists");
+                        information = "This user already exists";
                         break;
                     }
                     else if(userStatus == 2){
-                        System.out.println("User created!");
+                        information = "User created!";
                     }
                     break;
                 case 2:
@@ -99,15 +100,15 @@ public class App {
                     catch(Exception e){System.out.println(e.getMessage());}
 
                     if(userStatus == 2){
-                        System.out.println("This user not exists");
+                        information = "This user not exists";
                         break;
                     }
                     else if(userStatus == 3){
-                        System.out.println("Your password is wrong");
+                        information = "Your password is wrong";
                         break;
                     }
                     else if(userStatus == 4){
-                        System.out.println("OK!");
+                        information = "OK!";
                     }
                     break;
                 case 3:
@@ -115,20 +116,20 @@ public class App {
                     break;
             }
             fn.clearScreen();
-            System.out.println(information);
             if(((userStatus == 2 && option == 1) || userStatus == 4 || option == 3) && !exit){
                 boolean exitToSecondMenu = false;
+                System.out.println(information);
                 while(!exitToSecondMenu){
-                    System.out.println("--------------------");
+                    System.out.println("---------------------------");
                     System.out.println("IMDB 5000");
-                    System.out.println("--------------------");
+                    System.out.println("---------------------------");
                     System.out.println("1. View recommendations");
                     System.out.println("2. Search movie");
                     System.out.println("3. Show all movies");
                     System.out.println("4. Rent a movie");
                     System.out.println("5. Upload another csv file");
                     System.out.println("6. Exit");
-                    System.out.println("--------------------");
+                    System.out.println("--------------------------");
 
                     optionOK = false;
                     while(!optionOK){
@@ -144,9 +145,7 @@ public class App {
                     fn.clearScreen();
                     switch (option){
                         case 1:
-                            System.out.println("Recommendations");
-                            //Show the simplex algorithm if not exist user data
-                            //Show the complex algorithm if exist user data
+                            fn.showRecommendations(user);
                             break;
                         case 2:
                             fn.search();
@@ -156,8 +155,7 @@ public class App {
                             fn.printAllMovie(movies);
                             break;
                         case 4:
-                            // If it is the first time, ask him 10 options
-                            fn.rentAMovie();
+                            fn.rentAMovie(user);
                             break;
                         case 5:
                             boolean validFile = false;
@@ -165,15 +163,21 @@ public class App {
                                 System.out.println("Please enter a file.csv to import a new data");
                                 String csv_file = scanner.next();
                                 validFile = fn.reload_CSV(csv_file);
+                                fn.clearScreen();
                             }
-                            System.out.println("The csv file was uploaded successfully");
+                            information = "The csv file was uploaded successfully";
                             break;
                         case 6:
                             exitToSecondMenu = true;
                             break;
                     }
-                    fn.clearScreen();
+                    if(option != 3 && option != 1){
+                        fn.clearScreen();
+                    }
                 }
+            }
+            else {
+                System.out.println(information);
             }
         }
     }

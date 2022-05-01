@@ -50,5 +50,42 @@ def movieSearch():
     }
     return movies
 
+@app.route('/addRating', methods=['POST'])
+def addRating():
+    response = request.data.decode("utf-8")    
+    vote = json.loads(response)
+    print(vote)  
+    db.addRating(vote['user'],vote['movie'],vote['vote'])    
+    return "OK"
+
+@app.route('/userHasLikes', methods=['POST'])
+def userHasLikes():
+    response = request.data.decode("utf-8")    
+    user = json.loads(response)
+    print(user)     
+    result = db.userHasLikes(user['user'])
+    return result
+
+@app.route('/simplexAlgorithm', methods=['POST'])
+def simplexAlgorithm():
+    result = db.simplexAlgorithm()
+    movies = {
+        "allMovies" : result,
+        "searchedMovies" : []
+    }
+    return movies
+
+@app.route('/showRecommendations', methods=['POST'])
+def showRecommendations():
+    response = request.data.decode("utf-8")    
+    exist = json.loads(response)
+    print(exist)
+    recommendations = db.showRecommendations(exist['exist'])   
+    result = {
+        "allMovies" : recommendations,
+        "searchedMovies" : []
+    } 
+    return result
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True, port=8000)

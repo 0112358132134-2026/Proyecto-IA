@@ -64,8 +64,10 @@ public class functions{
         Scanner scanner = new Scanner(System.in);
         boolean stopSearch = false;
         while(!stopSearch){
+            System.out.println("---------------------------------------------------------");
             System.out.print("Enter a text to search for related movies:");
             String toSearch = scanner.next();
+            System.out.println("---------------------------------------------------------");
             Movies results = movieSearch(toSearch);
             if(results.searchedMovies.size() > 0){
                 System.out.println("These are your results:");
@@ -85,6 +87,7 @@ public class functions{
                 }
             }
             if(option.equals("no") || option.equals("n")){ stopSearch = true; }
+            clearScreen();
         }
     }
     public Movies movieSearch(String name) throws IOException, InterruptedException {
@@ -143,6 +146,12 @@ public class functions{
                 }
                 System.out.println();
             }
+            System.out.print("      ");
+            System.out.print(String.format("%1$-52s","Movie name"));
+            System.out.print(String.format("%1$-35s","Director name"));
+            System.out.print(String.format("%1$-62s","Genres"));
+            System.out.print(String.format("%1$-5s","IMDB Score"));
+            System.out.println();
         }
     }
     public int userStatus(String user, String password, int option) throws IOException, InterruptedException {
@@ -174,13 +183,17 @@ public class functions{
                 return 0; //Other
         }
     }
+    public void rentAMovie(String user) throws IOException, InterruptedException {
 
-    public void rentAMovie() throws IOException, InterruptedException {
+        askMovies(user);
+        clearScreen();
         Scanner scanner = new Scanner(System.in);
         boolean stopSearch = false;
         while(!stopSearch){
+            System.out.println("-----------------------------------------------------");
             System.out.print("Enter a text to search for related movies:");
             String toSearch = scanner.next();
+            System.out.println("-----------------------------------------------------");
             Movies results = movieSearch(toSearch);
             if(results.searchedMovies.size() > 0){
                 System.out.println("These are your results:");
@@ -190,7 +203,8 @@ public class functions{
                 boolean indexExist = false;
                 int intIndex = -1;
                 while(!indexExist){
-                    System.out.println("Enter the number of the movie you want to rent:");
+                    System.out.println("-----------------------------------------------------");
+                    System.out.print("Enter the number of the movie you want to rent:");
                     String index = scanner.next();
                     try{
                         intIndex = Integer.parseInt(index);
@@ -201,27 +215,33 @@ public class functions{
                     catch (Exception e){
                     }
                 }
+                clearScreen();
                 String confirmation = "";
                 boolean confirmOK = false;
                 while(!confirmOK){
-                    System.out.println("Do you want to rent this movie?: " + results.searchedMovies.get(intIndex - 1) + " (Yes/No)");
+                    System.out.println("Do you want to rent the movie: " + results.searchedMovies.get(intIndex - 1) + "? (Yes/No)");
                     confirmation = scanner.next().toLowerCase();
                     if(confirmation.equals("yes") || confirmation.equals("no") || confirmation.equals("y") || confirmation.equals("n")){
                         confirmOK = true;
                     }
+                    clearScreen();
                 }
                 if(confirmation.equals("yes") || confirmation.equals("y")){
-                    String calfication = "";
-                    boolean calficationOk = false;
-                    while(!calficationOk){
-                        System.out.println("You liked the movie?: " + results.searchedMovies.get(intIndex - 1) + " (Yes/No)");
-                        calfication = scanner.next().toLowerCase();
-                        if(calfication.equals("yes") || calfication.equals("no") || calfication.equals("y") || calfication.equals("n")){
-                            calficationOk = true;
+                    String calification = "";
+                    boolean calificationOk = false;
+                    while(!calificationOk){
+                        System.out.println("You liked the movie: " + results.searchedMovies.get(intIndex - 1) + "? (Yes/No)");
+                        calification = scanner.next().toLowerCase();
+                        if(calification.equals("yes") || calification.equals("no") || calification.equals("y") || calification.equals("n")){
+                            calificationOk = true;
                         }
+                        clearScreen();
                     }
-                    // Save "Like" or "Dislike"
-                    System.out.println("SIUUUU");
+                    int vote = 0;
+                    if(calification.equals("yes") || calification.equals("y")){
+                        vote = 1;
+                    }
+                    addRating(user, results.searchedMovies.get(intIndex - 1), vote);
                 }
             }
             else{System.out.println("No results found");}
@@ -234,17 +254,143 @@ public class functions{
                 if(option.equals("yes") || option.equals("no") || option.equals("y") || option.equals("n")){
                     optionOK = true;
                 }
+                clearScreen();
             }
             if(option.equals("no") || option.equals("n")){ stopSearch = true; }
         }
     }
+    public void askMovies(String user) throws IOException, InterruptedException {
 
+        String JSON = "{\n" +
+                "  \"user\": " + "\"" + user + "\"" + "\n" +
+                "}";
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://127.0.0.1:8000/userHasLikes"))
+                .POST(HttpRequest.BodyPublishers.ofString(JSON))
+                .build();
+
+        HttpResponse<String> response = client.send(request,HttpResponse.BodyHandlers.ofString());
+        if(response.body().equals("0")) {
+            HttpClient _client = HttpClient.newHttpClient();
+            HttpRequest _request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://127.0.0.1:8000/simplexAlgorithm"))
+                    .POST(HttpRequest.BodyPublishers.noBody())
+                    .build();
+
+            HttpResponse<String> _response = _client.send(_request, HttpResponse.BodyHandlers.ofString());
+            Gson g = new Gson();
+            Movies movies = g.fromJson(_response.body(), Movies.class);
+            List<List<String>> allMovies = movies.allMovies;
+
+            for(int i = 0; i < allMovies.size(); i++){
+                System.out.println("-----------------------------------------------------------------------------------------------------");
+                System.out.print(String.format("%1$-52s","Name"));
+                System.out.print(String.format("%1$-15s","Votes"));
+                System.out.print(String.format("%1$-15s","IMDB Score"));
+                System.out.println();
+                System.out.println("-----------------------------------------------------------------------------------------------------");
+                for(int j = 0; j < allMovies.get(i).size(); j++){
+                    String value = allMovies.get(i).get(j);
+                    if(j == 0){
+                        System.out.print(String.format("%1$-52s",value));
+                    }
+                    else if(j == 1){
+                        System.out.print(String.format("%1$-15s",value));
+                    }
+                    else if(j == 2){
+                        System.out.print(String.format("%1$-15s",value));
+                    }
+                }
+                System.out.println();
+                // Questions
+                String calification = "";
+                boolean calificationOk = false;
+                Scanner scanner = new Scanner(System.in);
+                while(!calificationOk){
+                    System.out.println("-----------------------------------------------------------------------------------------------------");
+                    System.out.println("Did you like the movie: " + allMovies.get(i).get(0) + "? (Yes/No/NV {no vote})");
+                    System.out.println("-----------------------------------------------------------------------------------------------------");
+                    calification = scanner.next().toLowerCase();
+                    if(calification.equals("yes") || calification.equals("no") || calification.equals("y") || calification.equals("n") || calification.equals("nv")){
+                        calificationOk = true;
+                    }
+                }
+                if(calification.equals("yes") || calification.equals("y")){
+                    addRating(user, allMovies.get(i).get(0), 1);
+                }
+                else if(calification.equals("no") || calification.equals("n")){
+                    addRating(user, allMovies.get(i).get(0), 0);
+                }
+                clearScreen();
+            }
+        }
+    }
+    public void addRating(String user, String movie, int vote) throws IOException, InterruptedException {
+
+        String JSON = "{\n" +
+                "  \"user\": " + "\"" + user + "\"" + ",\n" +
+                "  \"movie\": " + "\"" + movie + "\"" + ",\n" +
+                "  \"vote\": " + vote + "\n" +
+                "}";
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://127.0.0.1:8000/addRating"))
+                .POST(HttpRequest.BodyPublishers.ofString(JSON))
+                .build();
+
+        HttpResponse<String> response = client.send(request,HttpResponse.BodyHandlers.ofString());
+    }
+
+    public void showRecommendations(String user) throws IOException, InterruptedException{
+
+        String JSON = "{\n" +
+                "  \"user\": " + "\"" + user + "\"" + "\n" +
+                "}";
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://127.0.0.1:8000/userHasLikes"))
+                .POST(HttpRequest.BodyPublishers.ofString(JSON))
+                .build();
+
+        HttpResponse<String> response = client.send(request,HttpResponse.BodyHandlers.ofString());
+
+        int exist = 1;
+        if(response.body().equals("0")){
+            exist = 0;
+        }
+        JSON = "{\n" +
+                "  \"exist\": " + exist + "\n" +
+                "}";
+
+        HttpClient _client = HttpClient.newHttpClient();
+        HttpRequest _request = HttpRequest.newBuilder()
+                .uri(URI.create("http://127.0.0.1:8000/showRecommendations"))
+                .POST(HttpRequest.BodyPublishers.ofString(JSON))
+                .build();
+
+        HttpResponse<String> _response = _client.send(_request,HttpResponse.BodyHandlers.ofString());
+        Gson g = new Gson();
+        Movies movies = g.fromJson(_response.body(), Movies.class);
+        List<List<String>> recommendations = movies.allMovies;
+        System.out.println("Your recommendations are: ");
+        for(int i = 0; i < recommendations.size(); i++){
+            for(int j = 0; j < recommendations.get(i).size(); j++){
+                System.out.print(recommendations.get(i).get(j) + " ----- ");
+            }
+            System.out.println();
+        }
+    }
     public void clearScreen(){
         for(int i = 0; i <= 1000; i++){
             System.out.println("");
         }
     }
 
+    // Unusable functions
     public static void cls(){
         try{
             new ProcessBuilder("cmd","/c","cls").inheritIO().start().waitFor();
@@ -253,8 +399,6 @@ public class functions{
             System.out.println(e);
         }
     }
-
-    // Unusable functions
     public static Movies GET_MOVIE(){
         Movies _movie = new Movies();
         try {
