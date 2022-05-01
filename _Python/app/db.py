@@ -38,7 +38,7 @@ def loadCSV(file):
             counter += 1
         if counter == 5000:
             break           
-    return "1" 
+    return "1"
 
 def reloadCSV(file):        
     try:
