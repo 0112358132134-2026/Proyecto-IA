@@ -17,7 +17,7 @@ public class App {
                 if(str_option.equals("yes") || str_option.equals("no") || str_option.equals("n") || str_option.equals("y")){
                     optionOK = true;
                 }
-                fn.clearScreen();
+                fn.cls();
             }
             if(str_option.equals("yes") || str_option.equals("y")){
                 boolean validFile = false;
@@ -67,7 +67,7 @@ public class App {
             String user;
             String password;
             int userStatus = -1;
-
+            String information = "";
             switch (option){
                 case 1:
 
@@ -115,6 +115,7 @@ public class App {
                     break;
             }
             fn.clearScreen();
+            System.out.println(information);
             if(((userStatus == 2 && option == 1) || userStatus == 4 || option == 3) && !exit){
                 boolean exitToSecondMenu = false;
                 while(!exitToSecondMenu){
