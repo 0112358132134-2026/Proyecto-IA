@@ -119,7 +119,6 @@ def movieSearch(name):
             movies.append(movie)
     return movies
 
-
 def addRating(user, movie, vote):    
     copyMovie = movie
     if "'" in movie:
