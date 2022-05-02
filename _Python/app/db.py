@@ -37,15 +37,9 @@ def loadCSV(file):
             sql = "INSERT INTO csv (movie_title, num_voted_users,imdb_score,director_name,actor_1_name,actor_2_name,actor_3_name,genres,plot_keywords, soup) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
             val = (df.iloc[i]['movie_title'],str(df.iloc[i]['num_voted_users']),str(df.iloc[i]['imdb_score']),df.iloc[i]['director_name'],df.iloc[i]['actor_1_name'],df.iloc[i]['actor_2_name'],df.iloc[i]['actor_3_name'],df.iloc[i]['genres'],df.iloc[i]['plot_keywords'],'')
             mycursor.execute(sql, val)                      
-        except:            
-
-            counter += 1
-        if counter == 5000:
-            break           
-    return "1"
-
-            print(f'Ha ocurrido un error insertando la tupla: {i}') 
-            errors += 1
+        except:
+            print(f'Error insertando, en la tupla: {i}')   
+            errors += 1                 
     mydb.commit()   
     print(f'Registros con error: {errors}\n')
 
@@ -114,7 +108,6 @@ def loadCSV(file):
     mydb.commit()
     print(f'Soups creadas exitosamente: {soups}')
     return "1" 
-
 
 def reloadCSV(file):        
     try:
@@ -242,3 +235,11 @@ def AllMoviesInfo():
         return "0"
     return movies
 
+def AllMoviesSoup():
+    mycursor = mydb.cursor()
+    sql = "SELECT movie_title, actor_1_name, actor_2_name, actor_3_name, director_name, plot_keywords, genres FROM csv"
+    mycursor.execute(sql)
+    movies = mycursor.fetchall()
+    if len(movies) == 0:
+        return "0"
+    return movies

@@ -1,5 +1,7 @@
 package naive;
 import com.google.gson.Gson;
+import jdk.security.jarsigner.JarSigner;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -240,11 +242,18 @@ public class functions{
                 .build();
 
         HttpResponse<String> response = client.send(request,HttpResponse.BodyHandlers.ofString());
+
         if(response.body().equals("0")) {
+
+            Json = "{\n" +
+                    "  \"user\": " + "\"" + user + "\"" + ",\n" +
+                    "  \"exist\": " + 0 + "\n" +
+                    "}";
+
             HttpClient _client = HttpClient.newHttpClient();
             HttpRequest _request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://127.0.0.1:8000/simplexAlgorithm"))
-                    .POST(HttpRequest.BodyPublishers.noBody())
+                    .uri(URI.create("http://127.0.0.1:8000/showRecommendations"))
+                    .POST(HttpRequest.BodyPublishers.ofString(Json))
                     .build();
 
             HttpResponse<String> _response = _client.send(_request, HttpResponse.BodyHandlers.ofString());
@@ -255,20 +264,16 @@ public class functions{
             for (List<String> movie : allMovies) {
                 System.out.println("-----------------------------------------------------------------------------------------------------");
                 System.out.printf("%1$-52s", "Name");
-                System.out.printf("%1$-15s", "Votes");
-                System.out.printf("%1$-15s", "IMDB Score");
                 System.out.println();
                 System.out.println("-----------------------------------------------------------------------------------------------------");
-                for (int j = 0; j < movie.size(); j++) {
-                    String value = movie.get(j);
-                    if (j == 0) {
-                        System.out.printf("%1$-52s", value);
-                    } else if (j == 1) {
-                        System.out.printf("%1$-15s", value);
-                    } else if (j == 2) {
-                        System.out.printf("%1$-15s", value);
+                int counter = 0;
+                for (String s : movie) {
+                    if (counter == 0){
+                        System.out.print(s);
                     }
+                    counter += 1;
                 }
+
                 System.out.println();
                 // Questions
                 String qualification = "";
@@ -309,7 +314,6 @@ public class functions{
     }
 
     // Login Functions
-
     public int userStatus(String user, String password, int option) throws IOException, InterruptedException {
 
         Json = "{\n" +
@@ -360,6 +364,7 @@ public class functions{
             exist = 0;
         }
         Json = "{\n" +
+                "  \"user\": " + "\"" + user + "\"" + ",\n" +
                 "  \"exist\": " + exist + "\n" +
                 "}";
 
@@ -374,12 +379,50 @@ public class functions{
         Movies movies = g.fromJson(_response.body(), Movies.class);
         List<List<String>> recommendations = movies.allMovies;
         System.out.println("Your recommendations are: ");
+        int rowCounter = 1;
         for (List<String> recommendation : recommendations) {
+            System.out.print(rowCounter + ". ");
+            int counter = 0;
             for (String s : recommendation) {
-                System.out.print(s + " ----- ");
+                if(counter == 0){
+                    System.out.printf("%1$-54s",s);
+                }
+                else if(counter == 1){
+                    System.out.printf("%1$-35s",s);
+                }
+                else if(counter == 2){
+                    System.out.printf("%1$-40s",s);
+                }
+                else if(counter == 3){
+                    System.out.printf("%1$-60s",s);
+                }
+                else if(counter == 4){
+                    System.out.printf("%1$-95s",s);
+                }
+                else if(counter == 5){
+                    System.out.printf("%1$-15s",s);
+                }
+                else if(counter == 6){
+                    System.out.printf("%1$-15s",s);
+                }
+                else if(counter == 7){
+                    System.out.printf("%1$-20s",s);
+                }
+                counter += 1;
             }
             System.out.println();
+            rowCounter += 1;
         }
+        System.out.print("    ");
+        System.out.printf("%1$-54s","MOVIE TITLE");
+        System.out.printf("%1$-35s","DIRECTOR");
+        System.out.printf("%1$-40s","GENRES");
+        System.out.printf("%1$-60s","ACTORS");
+        System.out.printf("%1$-95s","KEYWORDS");
+        System.out.printf("%1$-15s","IMDB SCORE");
+        System.out.printf("%1$-15s","USER VOTES");
+        System.out.printf("%1$-20s","SCORE");
+        System.out.println();
     }
 
     // Other Functions

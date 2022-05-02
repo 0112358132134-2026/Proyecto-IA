@@ -1,40 +1,55 @@
+from pickle import TRUE
 import pandas as pd
+from sympy import residue, true
 
 from db import UserPreferences, AllMoviesInfo
 
 def showRecommendations(exist, user):
-    if exist == 0:
+    if exist == 0:                
+        newReg = ToSimplexFormat(AllMoviesInfo())
         #convertir Lista de listas a DataFrame
         metadata = pd.DataFrame(newReg, columns=['Movie Title','Director', 'Genres','Actors','keywords','IMDB score','User votes'])
+        print(metadata.dtypes)
         #Algoritmo Simple
-        newReg = ToSimplexFormat(metadata)
-        return simplexAlgorithm(newReg)
+        return simplexAlgorithm(metadata)
     else:
-        return simplexAlgorithm(ComplexAlgorithm(user))
+        #_list = ComplexAlgorithm(user)
+        #dic = {'Movie Title':_list[0],'Director':_list[1], 'Genres':_list[2],'Actors':_list[3],'keywords':_list[4],'IMDB score':_list[5],'User votes':_list[6]}
+        complex = ComplexAlgorithm(user)
+        complex['IMDB score'] = pd.to_numeric(complex['IMDB score'])
+        complex['User votes'] = pd.to_numeric(complex['User votes'])
+        print(complex.dtypes)                
+        return simplexAlgorithm(complex)
 
 def ToSimplexFormat(registers):
     newRegisters = []
     for register in registers:
         _newRegister = []
-        #Title, Director, Genres, Actors, KeyWords
-        _newRegister.append(register[0], register[1], register[2], register[3], register[4])
+        #Title
+        _newRegister.append(register[0])
+        #Director
+        _newRegister.append(register[1])
+        #Genres
+        _newRegister.append(register[2])
+        #Actors
+        _newRegister.append(register[3])
+        #KeyWords
+        _newRegister.append(register[4])        
         #imdb_score
-        _newRegister.append(int(register[5]))
+        _newRegister.append(float(register[5]))
         #num voted users
-        _newRegister.append(float(register[6]))
-        #soup
-        _newRegister.append(register[7])
+        _newRegister.append(int(register[6]))        
         #Se agrega a la lista de listas
         newRegisters.append(_newRegister)
     return newRegisters
 
-def simplexAlgorithm(newReg):
+def simplexAlgorithm(metadata):
     #Calcular la media del promedio de votos
     C = metadata['IMDB score'].mean()
     print(C)
 
     # Calcular el número nínimo de votos requeridos para ser aceptado
-    m = metadata['User votes'].quantile(0.90)
+    m = metadata['User votes'].quantile(0.80)
     print(m)
 
     # Function that computes the weighted rating of each movie
@@ -44,19 +59,23 @@ def simplexAlgorithm(newReg):
         # Calculation based on the IMDB formula
         return (v/(v+m) * R) + (m/(m+v) * C)
 
-    # Define a new feature 'score' and calculate its value with `weighted_rating()`
+    # Define a new feature 'score' and calculate its value with `weighted_rating()`    
     q_movies = metadata.copy().loc[metadata['User votes'] >= m]
     q_movies['score'] = q_movies.apply(weighted_rating, axis=1)
 
     #Sort movies based on score calculated above
     q_movies = q_movies.sort_values('score', ascending=False)
-
+    
     #Return the top 15 movies
     names = []
+    directors = []
+    genres = []
+    actors = []
     usersVotes = []
     imdbScore = []
     score = []
-    qmovies2 = q_movies[['Movie Title','Director', 'Genres','Actors','keywords','IMDB score','User votes', 'score']].head(25)
+    qmovies2 = q_movies.head(25)
+    #pd.DataFrame(newReg, columns=['Movie Title','Director', 'Genres','Actors','keywords','IMDB score','User votes','Soup'])
     #for value in qmovies2['Movie Title']:
     #    names.append(value)
     #for value in qmovies2['User votes']:
@@ -75,18 +94,23 @@ def simplexAlgorithm(newReg):
     #    movie.append(str(score[counter]))
     #    movies.append(movie)
     #    counter += 1
-    for i in range(len(qmovies2)):
-        movie = [qmovies2.loc[i,'Movie Title'],
-        qmovies2.loc[i,'Director'],
-        qmovies2.loc[i,'Genres'],
-        qmovies2.loc[i,'Actors'],
-        qmovies2.loc[i,'keywords'],
-        qmovies2.loc[i,'IMDB score'],
-        qmovies2.loc[i,'User votes'],
-        qmovies2.loc[i,'score'],
-        ]
+    i = 0
+    for index,row in q_movies.iterrows():
+        movie = []
+        movie.append(row['Movie Title'])
+        movie.append(row['Director'])
+        movie.append(row['Genres'])
+        movie.append(row['Actors'])
+        movie.append(row['keywords'])
+        movie.append(row['IMDB score'])
+        movie.append(row['User votes'])
+        movie.append(row['score'])        
         movies.append(movie)
+        i += 1
+        if i > 10:
+            return movies
         #print("Total income in "+ df.loc[i,"Date"]+ " is:"+str(df.loc[i,"Income_1"]+df.loc[i,"Income_2"]))
+    print(movies)
     return movies
 
 def ComplexAlgorithm(user):
@@ -109,8 +133,8 @@ def ComplexAlgorithm(user):
     # Probabilities
     total_sentences = len(LikedMoviesSoups) + len(UnlikedMoviesSoups)
 
-    p_like = len(LikedMoviesSoups)/total_sentences;
-    p_unlike = len(UnlikedMoviesSoups)/total_sentences;
+    p_like = len(LikedMoviesSoups)/total_sentences
+    p_unlike = len(UnlikedMoviesSoups)/total_sentences
 
     # Frecuencias (Bag of words)
     def create_table_freq(corpus):
@@ -186,8 +210,6 @@ def ComplexAlgorithm(user):
 
     metadata['Result'] = r_values
     prev = metadata[['Movie Title','Director', 'Genres','Actors','keywords','IMDB score','User votes','Result']].sort_values(by=['Result'],ascending=False)
-
     #Deleting repeatable values
-    result = prev[~prev['Movie Title'].isin(RatedMovies.keys())]
-
-    return result.head(20)
+    result = prev[~prev['Movie Title'].isin(RatedMovies.keys())]           
+    return result.head(40)

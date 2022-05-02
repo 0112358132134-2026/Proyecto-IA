@@ -1,7 +1,7 @@
 from flask import Flask, request
 import json
 import db
-from complex_algorithms import GetRecommendation
+import complex_algorithms as ca
 
 app = Flask(__name__)
 
@@ -67,21 +67,12 @@ def userHasLikes():
     result = db.userHasLikes(user['user'])
     return result
 
-@app.route('/simplexAlgorithm', methods=['POST'])
-def simplexAlgorithm():
-    result = db.simplexAlgorithm()
-    movies = {
-        "allMovies" : result,
-        "searchedMovies" : []
-    }
-    return movies
-
 @app.route('/showRecommendations', methods=['POST'])
 def showRecommendations():
     response = request.data.decode("utf-8")    
-    exist = json.loads(response)
-    print(exist)
-    recommendations = db.showRecommendations(exist['exist'])   
+    user = json.loads(response)  
+    print(user)  
+    recommendations = ca.showRecommendations(user['exist'],user['user'])   
     result = {
         "allMovies" : recommendations,
         "searchedMovies" : []
@@ -89,5 +80,4 @@ def showRecommendations():
     return result
 
 if __name__ == '__main__':
-    #app.run(host='0.0.0.0', debug=True, port=8000)
-    print(GetRecommendation("jdeleon"))
+    app.run(host='0.0.0.0', debug=True, port=8000)    

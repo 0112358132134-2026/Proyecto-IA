@@ -42,7 +42,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/A. Proyectos/JAVA/4 - Búsqueda de propósito (BFS)/busqueda-de-proposito-0112358132134-2026"
+    "last_opened_file_path": "C:/A. Proyectos/JAVA/5 - Problema de las reinas (CSP)/el-problema-de-las-reinas-0112358132134-2026"
   }
 }]]></component>
   <component name="RunManager">
@@ -88,7 +88,8 @@
       <workItem from="1651333756190" duration="22709000" />
       <workItem from="1651365187759" duration="18062000" />
       <workItem from="1651423000712" duration="6168000" />
-      <workItem from="1651438951962" duration="3219000" />
+      <workItem from="1651438951962" duration="11943000" />
+      <workItem from="1651514759389" duration="2110000" />
     </task>
     <servers />
   </component>
@@ -102,6 +103,11 @@
           <properties class="java.lang.NullPointerException" package="java.lang" />
           <option name="timeStamp" value="28" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/naive/functions.java</url>
+          <line>361</line>
+          <option name="timeStamp" value="37" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <pin-to-top-manager>
