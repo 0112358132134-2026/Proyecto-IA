@@ -93,5 +93,6 @@ CREATE TABLE `csv` (
 	`actor_2_name` VARCHAR(50) NOT NULL,
 	`actor_3_name` VARCHAR(50) NOT NULL,
 	`genres` VARCHAR(100) NOT NULL,
-	`plot_keywords` VARCHAR(100) NOT NULL
+	`plot_keywords` VARCHAR(100) NOT NULL,
+	`soup` VARCHAR(2000) NOT NULL
 )

@@ -30,6 +30,9 @@
       </MavenGeneralSettings>
     </option>
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectId" id="28LWKGomIPtdrqwn6kzCOqx8ZW2" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -38,7 +41,8 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "WebServerToolWindowFactoryState": "false"
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/A. Proyectos/JAVA/4 - Búsqueda de propósito (BFS)/busqueda-de-proposito-0112358132134-2026"
   }
 }]]></component>
   <component name="RunManager">
@@ -83,7 +87,8 @@
       <workItem from="1651332492149" duration="1133000" />
       <workItem from="1651333756190" duration="22709000" />
       <workItem from="1651365187759" duration="18062000" />
-      <workItem from="1651423000712" duration="4853000" />
+      <workItem from="1651423000712" duration="6168000" />
+      <workItem from="1651438951962" duration="3219000" />
     </task>
     <servers />
   </component>
