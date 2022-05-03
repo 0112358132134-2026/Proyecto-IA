@@ -388,6 +388,7 @@ public class functions{
 
         HttpResponse<String> _response = _client.send(_request,HttpResponse.BodyHandlers.ofString());
         Gson g = new Gson();
+        String ok = "";
         Movies movies = g.fromJson(_response.body(), Movies.class);
         List<List<String>> recommendations = movies.allMovies;
         System.out.println("Your recommendations are: ");
