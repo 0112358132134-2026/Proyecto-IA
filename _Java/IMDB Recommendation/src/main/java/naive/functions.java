@@ -65,11 +65,15 @@ public class functions{
             System.out.println("---------------------------------------------------------");
             System.out.println("                         SEARCH                          ");
             System.out.println("---------------------------------------------------------");
-            System.out.print("Enter a text to search for related movies:");
+            System.out.println("Enter a text to search for related movies:");
             String toSearch = scanner.next();
             System.out.println("---------------------------------------------------------");
             Movies results = movieSearch(toSearch);
-            if(results.searchedMovies.size() > 0){
+            int size = results.searchedMovies.size();
+            if(toSearch.equals("")){
+                size = 0;
+            }
+            if(size > 0){
                 System.out.println("These are your results:");
                 for(int i = 0; i < results.searchedMovies.size(); i++){
                     System.out.println((i + 1) + " " + results.searchedMovies.get(i));
@@ -164,20 +168,25 @@ public class functions{
             String toSearch = scanner.next();
             System.out.println("-----------------------------------------------------");
             Movies results = movieSearch(toSearch);
-            if(results.searchedMovies.size() > 0){
+            int length = results.searchedMovies.size();
+            if(toSearch.length() == 0){
+                length = 0;
+            }
+
+            if(length > 0){
                 System.out.println("These are your results:");
                 for(int i = 0; i < results.searchedMovies.size(); i++){
                     System.out.println((i + 1) + " " + results.searchedMovies.get(i));
                 }
                 boolean indexExist = false;
-                int intIndex = -1;
+                int intIndex = -2;
                 while(!indexExist){
-                    System.out.println("-----------------------------------------------------");
-                    System.out.print("Enter the number of the movie you want to rent:");
+                    System.out.println("----------------------------------------------------------------------------------------------");
+                    System.out.print("Enter the number of the movie you want to rent or enter (-1) if you dont want to rent a movie:");
                     String index = scanner.next();
                     try{
                         intIndex = Integer.parseInt(index);
-                        if(intIndex > 0 && intIndex <= results.searchedMovies.size()){
+                        if(intIndex >= -1 && intIndex <= results.searchedMovies.size()){
                             indexExist = true;
                         }
                     }
@@ -185,36 +194,38 @@ public class functions{
                         System.out.print("");
                     }
                 }
-                clearScreen();
-                String confirmation = "";
-                boolean confirmOK = false;
-                while(!confirmOK){
-                    System.out.println("Do you want to rent the movie: " + results.searchedMovies.get(intIndex - 1) + "? (Yes/No)");
-                    confirmation = scanner.next().toLowerCase();
-                    if(confirmation.equals("yes") || confirmation.equals("no") || confirmation.equals("y") || confirmation.equals("n")){
-                        confirmOK = true;
-                    }
+                if(intIndex != -1){
                     clearScreen();
-                }
-                if(confirmation.equals("yes") || confirmation.equals("y")){
-                    String qualification = "";
-                    boolean qualificationOk = false;
-                    while(!qualificationOk){
-                        System.out.println("You liked the movie: " + results.searchedMovies.get(intIndex - 1) + "? (Yes/No)");
-                        qualification = scanner.next().toLowerCase();
-                        if(qualification.equals("yes") || qualification.equals("no") || qualification.equals("y") || qualification.equals("n")){
-                            qualificationOk = true;
+                    String confirmation = "";
+                    boolean confirmOK = false;
+                    while(!confirmOK){
+                        System.out.println("Do you want to rent the movie: " + results.searchedMovies.get(intIndex - 1) + "? (Yes/No)");
+                        confirmation = scanner.next().toLowerCase();
+                        if(confirmation.equals("yes") || confirmation.equals("no") || confirmation.equals("y") || confirmation.equals("n")){
+                            confirmOK = true;
                         }
                         clearScreen();
                     }
-                    int vote = 0;
-                    if(qualification.equals("yes") || qualification.equals("y")){
-                        vote = 1;
+                    if(confirmation.equals("yes") || confirmation.equals("y")){
+                        String qualification = "";
+                        boolean qualificationOk = false;
+                        while(!qualificationOk){
+                            System.out.println("You liked the movie: " + results.searchedMovies.get(intIndex - 1) + "? (Yes/No)");
+                            qualification = scanner.next().toLowerCase();
+                            if(qualification.equals("yes") || qualification.equals("no") || qualification.equals("y") || qualification.equals("n")){
+                                qualificationOk = true;
+                            }
+                            clearScreen();
+                        }
+                        int vote = 0;
+                        if(qualification.equals("yes") || qualification.equals("y")){
+                            vote = 1;
+                        }
+                        addRating(user, results.searchedMovies.get(intIndex - 1), vote);
                     }
-                    addRating(user, results.searchedMovies.get(intIndex - 1), vote);
                 }
             }
-            else{System.out.println("No results found");}
+            else{System.out.println("Sorry, no results found!");}
 
             String option = "";
             boolean optionOK = false;
@@ -260,10 +271,10 @@ public class functions{
             Gson g = new Gson();
             Movies movies = g.fromJson(_response.body(), Movies.class);
             List<List<String>> allMovies = movies.allMovies;
-
+            int index = 1;
             for (List<String> movie : allMovies) {
                 System.out.println("-----------------------------------------------------------------------------------------------------");
-                System.out.printf("%1$-52s", "Name");
+                System.out.printf("%1$-52s", "Name (" + index + "/" + allMovies.size() + ")");
                 System.out.println();
                 System.out.println("-----------------------------------------------------------------------------------------------------");
                 int counter = 0;
@@ -293,6 +304,7 @@ public class functions{
                     addRating(user, movie.get(0), 0);
                 }
                 clearScreen();
+                index += 1;
             }
         }
     }

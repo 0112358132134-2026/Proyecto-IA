@@ -1,6 +1,6 @@
 from pickle import TRUE
 import pandas as pd
-from sympy import residue, true
+from sympy import comp, residue, true
 
 from db import UserPreferences, AllMoviesInfo
 
@@ -8,18 +8,26 @@ def showRecommendations(exist, user):
     if exist == 0:                
         newReg = ToSimplexFormat(AllMoviesInfo())
         #convertir Lista de listas a DataFrame
-        metadata = pd.DataFrame(newReg, columns=['Movie Title','Director', 'Genres','Actors','keywords','IMDB score','User votes'])
-        print(metadata.dtypes)
+        metadata = pd.DataFrame(newReg, columns=['Movie Title','Director', 'Genres','Actors','keywords','IMDB score','User votes'])        
         #Algoritmo Simple
         return simplexAlgorithm(metadata)
-    else:
-        #_list = ComplexAlgorithm(user)
-        #dic = {'Movie Title':_list[0],'Director':_list[1], 'Genres':_list[2],'Actors':_list[3],'keywords':_list[4],'IMDB score':_list[5],'User votes':_list[6]}
+    else:        
         complex = ComplexAlgorithm(user)
         complex['IMDB score'] = pd.to_numeric(complex['IMDB score'])
-        complex['User votes'] = pd.to_numeric(complex['User votes'])
-        print(complex.dtypes)                
-        return simplexAlgorithm(complex)
+        complex['User votes'] = pd.to_numeric(complex['User votes'])          
+        movies = []               
+        for i in range(10):
+            movie = []
+            movie.append(complex.iat[i,0])
+            movie.append(complex.iat[i,1])
+            movie.append(complex.iat[i,2])
+            movie.append(complex.iat[i,3])
+            movie.append(complex.iat[i,4])
+            movie.append(str(complex.iat[i,5]))
+            movie.append(str(complex.iat[i,6]))
+            movie.append(str(complex.iat[i,7]))
+            movies.append(movie)
+        return movies
 
 def ToSimplexFormat(registers):
     newRegisters = []
@@ -49,7 +57,7 @@ def simplexAlgorithm(metadata):
     print(C)
 
     # Calcular el número nínimo de votos requeridos para ser aceptado
-    m = metadata['User votes'].quantile(0.80)
+    m = metadata['User votes'].quantile(0.90)
     print(m)
 
     # Function that computes the weighted rating of each movie
@@ -67,33 +75,7 @@ def simplexAlgorithm(metadata):
     q_movies = q_movies.sort_values('score', ascending=False)
     
     #Return the top 15 movies
-    names = []
-    directors = []
-    genres = []
-    actors = []
-    usersVotes = []
-    imdbScore = []
-    score = []
-    qmovies2 = q_movies.head(25)
-    #pd.DataFrame(newReg, columns=['Movie Title','Director', 'Genres','Actors','keywords','IMDB score','User votes','Soup'])
-    #for value in qmovies2['Movie Title']:
-    #    names.append(value)
-    #for value in qmovies2['User votes']:
-    #    usersVotes.append(value)
-    #for value in qmovies2['IMDB score']:
-    #    imdbScore.append(value)
-    #for value in qmovies2['score']:
-    #    score.append(value)
     movies = []
-    #counter = 0
-    #while counter < 25:
-    #    movie = []
-    #    movie.append(names[counter])
-    #    movie.append(str(usersVotes[counter]))
-    #    movie.append(str(imdbScore[counter]))
-    #    movie.append(str(score[counter]))
-    #    movies.append(movie)
-    #    counter += 1
     i = 0
     for index,row in q_movies.iterrows():
         movie = []
@@ -107,10 +89,8 @@ def simplexAlgorithm(metadata):
         movie.append(row['score'])        
         movies.append(movie)
         i += 1
-        if i > 10:
-            return movies
-        #print("Total income in "+ df.loc[i,"Date"]+ " is:"+str(df.loc[i,"Income_1"]+df.loc[i,"Income_2"]))
-    print(movies)
+        if i > 14:
+            return movies    
     return movies
 
 def ComplexAlgorithm(user):

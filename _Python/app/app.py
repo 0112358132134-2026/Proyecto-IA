@@ -18,7 +18,7 @@ def loadCSV():
 
 @app.route('/reloadCSV', methods=['POST'])
 def reloadCSV():
-    response = request.data.decode("utf-8")    
+    response = request.data.decode("utf-8")
     csv = json.loads(response)       
     result = db.reloadCSV(csv['file'])
     return result  

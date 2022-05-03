@@ -39,12 +39,12 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/A. Proyectos/JAVA/5 - Problema de las reinas (CSP)/el-problema-de-las-reinas-0112358132134-2026"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/A. Proyectos/JAVA/5 - Problema de las reinas (CSP)/el-problema-de-las-reinas-0112358132134-2026&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="naive.App" />
@@ -90,6 +90,9 @@
       <workItem from="1651423000712" duration="6168000" />
       <workItem from="1651438951962" duration="11943000" />
       <workItem from="1651514759389" duration="2110000" />
+      <workItem from="1651547833051" duration="3180000" />
+      <workItem from="1651556081656" duration="2300000" />
+      <workItem from="1651596983872" duration="2073000" />
     </task>
     <servers />
   </component>
@@ -105,8 +108,13 @@
         </breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/naive/functions.java</url>
-          <line>361</line>
+          <line>373</line>
           <option name="timeStamp" value="37" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/naive/functions.java</url>
+          <line>70</line>
+          <option name="timeStamp" value="40" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
