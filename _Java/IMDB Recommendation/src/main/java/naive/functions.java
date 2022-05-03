@@ -1,7 +1,5 @@
 package naive;
 import com.google.gson.Gson;
-import jdk.security.jarsigner.JarSigner;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -65,7 +63,7 @@ public class functions{
             System.out.println("---------------------------------------------------------");
             System.out.println("                         SEARCH                          ");
             System.out.println("---------------------------------------------------------");
-            System.out.println("Enter a text to search for related movies:");
+            System.out.print("Enter a text to search for related movies:");
             String toSearch = scanner.next();
             System.out.println("---------------------------------------------------------");
             Movies results = movieSearch(toSearch);
@@ -271,40 +269,54 @@ public class functions{
             Gson g = new Gson();
             Movies movies = g.fromJson(_response.body(), Movies.class);
             List<List<String>> allMovies = movies.allMovies;
-            int index = 1;
-            for (List<String> movie : allMovies) {
-                System.out.println("-----------------------------------------------------------------------------------------------------");
-                System.out.printf("%1$-52s", "Name (" + index + "/" + allMovies.size() + ")");
-                System.out.println();
-                System.out.println("-----------------------------------------------------------------------------------------------------");
-                int counter = 0;
-                for (String s : movie) {
-                    if (counter == 0){
-                        System.out.print(s);
-                    }
-                    counter += 1;
-                }
-
-                System.out.println();
-                // Questions
-                String qualification = "";
-                boolean qualificationOk = false;
-                Scanner scanner = new Scanner(System.in);
-                while (!qualificationOk) {
+            int yes = 0;
+            int no = 0;
+            int counterAux = 0;
+            while(yes < 1 || no < 1){
+                if (counterAux > 0){
                     System.out.println("-----------------------------------------------------------------------------------------------------");
-                    System.out.println("Did you like the movie: " + movie.get(0) + "? (Yes/No/NV {no vote})");
-                    qualification = scanner.next().toLowerCase();
-                    if (qualification.equals("yes") || qualification.equals("no") || qualification.equals("y") || qualification.equals("n") || qualification.equals("nv")) {
-                        qualificationOk = true;
+                    System.out.println("Please enter at least one movie you like and one you don't like.");
+                }
+                int index = 1;
+                yes = 0;
+                no = 0;
+                for (List<String> movie : allMovies) {
+                    System.out.println("-----------------------------------------------------------------------------------------------------");
+                    System.out.printf("%1$-52s", "Name (" + index + "/" + allMovies.size() + ")");
+                    System.out.println();
+                    System.out.println("-----------------------------------------------------------------------------------------------------");
+                    int counter = 0;
+                    for (String s : movie) {
+                        if (counter == 0){
+                            System.out.print(s);
+                        }
+                        counter += 1;
                     }
+
+                    System.out.println();
+                    // Questions
+                    String qualification = "";
+                    boolean qualificationOk = false;
+                    Scanner scanner = new Scanner(System.in);
+                    while (!qualificationOk) {
+                        System.out.println("-----------------------------------------------------------------------------------------------------");
+                        System.out.println("Did you like the movie: " + movie.get(0) + "? (Yes/No/NV {no vote})");
+                        qualification = scanner.next().toLowerCase();
+                        if (qualification.equals("yes") || qualification.equals("no") || qualification.equals("y") || qualification.equals("n") || qualification.equals("nv")) {
+                            qualificationOk = true;
+                        }
+                    }
+                    if (qualification.equals("yes") || qualification.equals("y")) {
+                        addRating(user, movie.get(0), 1);
+                        yes += 1;
+                    } else if (qualification.equals("no") || qualification.equals("n")) {
+                        addRating(user, movie.get(0), 0);
+                        no += 1;
+                    }
+                    clearScreen();
+                    index += 1;
                 }
-                if (qualification.equals("yes") || qualification.equals("y")) {
-                    addRating(user, movie.get(0), 1);
-                } else if (qualification.equals("no") || qualification.equals("n")) {
-                    addRating(user, movie.get(0), 0);
-                }
-                clearScreen();
-                index += 1;
+                counterAux += 1;
             }
         }
     }

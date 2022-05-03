@@ -93,7 +93,7 @@
       <workItem from="1651547833051" duration="3180000" />
       <workItem from="1651556081656" duration="2300000" />
       <workItem from="1651596983872" duration="2073000" />
-      <workItem from="1651603111641" duration="68000" />
+      <workItem from="1651603111641" duration="4049000" />
     </task>
     <servers />
   </component>
@@ -107,16 +107,6 @@
           <properties class="java.lang.NullPointerException" package="java.lang" />
           <option name="timeStamp" value="28" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/naive/functions.java</url>
-          <line>373</line>
-          <option name="timeStamp" value="37" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/naive/functions.java</url>
-          <line>70</line>
-          <option name="timeStamp" value="40" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <pin-to-top-manager>
