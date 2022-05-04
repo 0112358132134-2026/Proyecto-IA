@@ -335,3 +335,20 @@ def AllMoviesSoup():
     if len(movies) == 0:
         return "0"
     return movies
+
+def checkUser(user):
+    mycursor = mydb.cursor()
+    sql = f"SELECT MovieId FROM user_preferences WHERE UserId = '{user}' AND Value = 1"
+    mycursor.execute(sql)
+    moviesLike = mycursor.fetchall()   
+    print(len(moviesLike))
+
+    mycursor = mydb.cursor()
+    sql = f"SELECT MovieId FROM user_preferences WHERE UserId = '{user}' AND Value = 0"
+    mycursor.execute(sql)
+    moviesDislike = mycursor.fetchall()
+    print(len(moviesDislike))
+
+    if len(moviesLike) >= 1 and len(moviesDislike) >= 1:
+        return True
+    return False

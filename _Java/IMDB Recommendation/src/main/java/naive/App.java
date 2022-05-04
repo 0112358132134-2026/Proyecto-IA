@@ -27,7 +27,8 @@ public class App {
             boolean validFile = false;
             while(!validFile){
                 System.out.println("Please enter a file.csv to import data: ");
-                String csv_file = scanner.next();
+                Scanner scannerCSV = new Scanner(System.in);
+                String csv_file = scannerCSV.nextLine();
                 validFile = fn.load_CSV(csv_file);
                 fn.clearScreen();
             }
@@ -64,9 +65,11 @@ public class App {
 
             if(option == 1 || option == 2){
                 System.out.print("USER:");
-                user = scanner.next();
+                Scanner scannerUser = new Scanner(System.in);
+                user = scannerUser.nextLine();
                 System.out.print("PASSWORD:");
-                password = scanner.next();
+                Scanner scannerPassword = new Scanner(System.in);
+                password = scannerPassword.nextLine();
 
                 try{
                     userStatus = fn.userStatus(user,password,option);
@@ -141,7 +144,8 @@ public class App {
                             boolean validFile = false;
                             while(!validFile){
                                 System.out.println("Please enter a file.csv to import a new data");
-                                String csv_file = scanner.next();
+                                Scanner scannerCSV = new Scanner(System.in);
+                                String csv_file = scannerCSV.nextLine();
                                 validFile = fn.reload_CSV(csv_file);
                                 fn.clearScreen();
                             }

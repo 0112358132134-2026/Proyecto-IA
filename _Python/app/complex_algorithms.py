@@ -2,21 +2,21 @@ from pickle import TRUE
 import pandas as pd
 from sympy import comp, residue, true
 
-from db import UserPreferences, AllMoviesInfo
+from db import *
 
 def showRecommendations(exist, user):
-    if exist == 0:                
+    if exist == 0 or not checkUser(user):
         newReg = ToSimplexFormat(AllMoviesInfo())
         #convertir Lista de listas a DataFrame
         metadata = pd.DataFrame(newReg, columns=['Movie Title','Director', 'Genres','Actors','keywords','IMDB score','User votes'])        
         #Algoritmo Simple
         return simplexAlgorithm(metadata)
-    else:        
+    else:                     
         complex = ComplexAlgorithm(user)
         complex['IMDB score'] = pd.to_numeric(complex['IMDB score'])
         complex['User votes'] = pd.to_numeric(complex['User votes'])          
         movies = []               
-        for i in range(10):
+        for i in range(15):
             movie = []
             movie.append(complex.iat[i,0])
             movie.append(complex.iat[i,1])

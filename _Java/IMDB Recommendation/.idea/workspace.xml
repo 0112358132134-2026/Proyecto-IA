@@ -39,12 +39,12 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/A. Proyectos/JAVA/5 - Problema de las reinas (CSP)/el-problema-de-las-reinas-0112358132134-2026&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/1. Projects/JAVA/Parcial I (Greedy Search, CSP)/primer-parcial-0112358132134-2026"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="naive.App" />
@@ -95,6 +95,10 @@
       <workItem from="1651596983872" duration="2073000" />
       <workItem from="1651603111641" duration="4049000" />
       <workItem from="1651613443464" duration="669000" />
+      <workItem from="1651616261609" duration="262000" />
+      <workItem from="1651616691600" duration="33000" />
+      <workItem from="1651616970506" duration="2818000" />
+      <workItem from="1651626527098" duration="4237000" />
     </task>
     <servers />
   </component>
@@ -108,6 +112,11 @@
           <properties class="java.lang.NullPointerException" package="java.lang" />
           <option name="timeStamp" value="28" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/naive/functions.java</url>
+          <line>80</line>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <pin-to-top-manager>

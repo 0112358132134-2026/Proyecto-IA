@@ -57,14 +57,14 @@ public class functions{
     // Search functions
     public void search() throws IOException, InterruptedException {
 
-        Scanner scanner = new Scanner(System.in);
         boolean stopSearch = false;
         while(!stopSearch){
             System.out.println("---------------------------------------------------------");
             System.out.println("                         SEARCH                          ");
             System.out.println("---------------------------------------------------------");
             System.out.print("Enter a text to search for related movies:");
-            String toSearch = scanner.next();
+            Scanner scanner = new Scanner(System.in);
+            String toSearch = scanner.nextLine();
             System.out.println("---------------------------------------------------------");
             Movies results = movieSearch(toSearch);
             int size = results.searchedMovies.size();
@@ -158,12 +158,12 @@ public class functions{
 
         askMovies(user);
         clearScreen();
-        Scanner scanner = new Scanner(System.in);
         boolean stopSearch = false;
         while(!stopSearch){
             System.out.println("-----------------------------------------------------");
             System.out.print("Enter a text to search for related movies:");
-            String toSearch = scanner.next();
+            Scanner scanner = new Scanner(System.in);
+            String toSearch = scanner.nextLine();
             System.out.println("-----------------------------------------------------");
             Movies results = movieSearch(toSearch);
             int length = results.searchedMovies.size();
@@ -268,18 +268,21 @@ public class functions{
             HttpResponse<String> _response = _client.send(_request, HttpResponse.BodyHandlers.ofString());
             Gson g = new Gson();
             Movies movies = g.fromJson(_response.body(), Movies.class);
-            List<List<String>> allMovies = movies.allMovies;
-            int yes = 0;
-            int no = 0;
-            int counterAux = 0;
-            while(yes < 1 || no < 1){
-                if (counterAux > 0){
-                    System.out.println("-----------------------------------------------------------------------------------------------------");
-                    System.out.println("Please enter at least one movie you like and one you don't like.");
+            List<List<String>> allMovies = movies.allMovies;int counterAux = 0;
+
+            String wantToVote = "";
+            boolean wantToVoteOk = false;
+            Scanner _scanner = new Scanner(System.in);
+            while (!wantToVoteOk) {
+                System.out.println("-----------------------------------------------------------------------------------------------------");
+                System.out.println("Do you want to rate one of our most popular movies? (Yes/No)");
+                wantToVote = _scanner.next().toLowerCase();
+                if (wantToVote.equals("yes") || wantToVote.equals("no") || wantToVote.equals("y") || wantToVote.equals("n")) {
+                    wantToVoteOk = true;
                 }
+            }
+            if(wantToVote.equals("yes") || wantToVote.equals("y")){
                 int index = 1;
-                yes = 0;
-                no = 0;
                 for (List<String> movie : allMovies) {
                     System.out.println("-----------------------------------------------------------------------------------------------------");
                     System.out.printf("%1$-52s", "Name (" + index + "/" + allMovies.size() + ")");
@@ -308,15 +311,12 @@ public class functions{
                     }
                     if (qualification.equals("yes") || qualification.equals("y")) {
                         addRating(user, movie.get(0), 1);
-                        yes += 1;
                     } else if (qualification.equals("no") || qualification.equals("n")) {
                         addRating(user, movie.get(0), 0);
-                        no += 1;
                     }
                     clearScreen();
                     index += 1;
                 }
-                counterAux += 1;
             }
         }
     }
