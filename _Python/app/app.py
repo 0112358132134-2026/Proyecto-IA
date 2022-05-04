@@ -26,8 +26,7 @@ def reloadCSV():
 @app.route('/userStatus', methods=['POST'])
 def userStatus():
     response = request.data.decode("utf-8")    
-    user = json.loads(response)    
-    print(user)
+    user = json.loads(response)        
     status = db.userStatus(user['user'],user['password'],user['option'])
     return str(status)
 
@@ -54,24 +53,21 @@ def movieSearch():
 @app.route('/addRating', methods=['POST'])
 def addRating():
     response = request.data.decode("utf-8")    
-    vote = json.loads(response)
-    print(vote)  
+    vote = json.loads(response)    
     db.addRating(vote['user'],vote['movie'],vote['vote'])    
     return "OK"
 
 @app.route('/userHasLikes', methods=['POST'])
 def userHasLikes():
     response = request.data.decode("utf-8")    
-    user = json.loads(response)
-    print(user)     
+    user = json.loads(response)    
     result = db.userHasLikes(user['user'])
     return result
 
 @app.route('/showRecommendations', methods=['POST'])
 def showRecommendations():
     response = request.data.decode("utf-8")    
-    user = json.loads(response)  
-    print(user)  
+    user = json.loads(response)      
     recommendations = ca.showRecommendations(user['exist'],user['user'])   
     result = {
         "allMovies" : recommendations,
@@ -80,4 +76,4 @@ def showRecommendations():
     return result
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True, port=8000)    
+    app.run(host='0.0.0.0', debug=True, port=8000)

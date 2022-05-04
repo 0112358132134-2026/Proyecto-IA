@@ -39,12 +39,12 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/1. Projects/JAVA/Parcial I (Greedy Search, CSP)/primer-parcial-0112358132134-2026"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/1. Projects/JAVA/Parcial I (Greedy Search, CSP)/primer-parcial-0112358132134-2026&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="naive.App" />
@@ -99,8 +99,9 @@
       <workItem from="1651616691600" duration="33000" />
       <workItem from="1651616970506" duration="2818000" />
       <workItem from="1651626527098" duration="4237000" />
-
       <workItem from="1651617739884" duration="354000" />
+      <workItem from="1651648830850" duration="60000" />
+      <workItem from="1651652497563" duration="805000" />
     </task>
     <servers />
   </component>

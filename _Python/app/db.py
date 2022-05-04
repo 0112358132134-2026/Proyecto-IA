@@ -211,22 +211,6 @@ def reloadCSV(file):
     print(f'Soups creadas exitosamente: {soups}')
     return "1" 
 
-
-    #counter = 0
-    #for i in range(len(df.index)):
-    #    mycursor = mydb.cursor()
-    #    try:
-    #        sql = "INSERT INTO csv (movie_title, num_voted_users,imdb_score,director_name,actor_1_name,actor_2_name,actor_3_name,genres,plot_keywords) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    #        val = (df.iloc[counter]['movie_title'],str(df.iloc[counter]['num_voted_users']),str(df.iloc[counter]['imdb_score']),df.iloc[counter]['director_name'],df.iloc[counter]['actor_1_name'],df.iloc[counter]['actor_2_name'],df.iloc[counter]['actor_3_name'],df.iloc[counter]['genres'],df.iloc[counter]['plot_keywords'])
-    #        mycursor.execute(sql, val)
-    #        mydb.commit()       
-    #        counter += 1            
-    #    except:            
-    #        counter += 1        
-    #    if counter == 5000:            
-    #        break    
-    #return "1"
-
 def userStatus(user, password, option):
 
     mycursor = mydb.cursor()    

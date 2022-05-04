@@ -10,6 +10,7 @@ public class App {
         boolean csvExist = fn.csvExist();
         boolean optionOK = false;
         String str_option = "";
+        int exist = 0;
 
         if (csvExist){
             while(!optionOK){
@@ -22,6 +23,7 @@ public class App {
                 }
                 fn.clearScreen();
             }
+            exist = 1;
         }
         if(str_option.equals("yes") || str_option.equals("y") || !csvExist){
             boolean validFile = false;
@@ -29,7 +31,12 @@ public class App {
                 System.out.println("Please enter a file.csv to import data: ");
                 Scanner scannerCSV = new Scanner(System.in);
                 String csv_file = scannerCSV.nextLine();
-                validFile = fn.load_CSV(csv_file);
+                if(exist == 0){
+                    validFile = fn.load_CSV(csv_file);
+                }
+                else{
+                    validFile = fn.reload_CSV(csv_file);
+                }
                 fn.clearScreen();
             }
             System.out.println("The csv file was uploaded successfully");
